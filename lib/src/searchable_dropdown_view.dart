@@ -47,8 +47,11 @@ class SearchableDropdown<T> extends StatefulWidget {
   ///Dropdown items
   List<SearchableDropdownMenuItem<T>>? items;
 
-  ///Paginated or normal request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? getRequest;
+  ///Paginated request service which is returns DropdownMenuItem list
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+
+  ///Future service which is returns DropdownMenuItem list
+  Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   ///Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   int? requestItemCount;
@@ -83,8 +86,24 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.isEnabled = true,
     this.disabledOnTap,
     this.onChanged,
-    required this.getRequest,
+    required this.paginatedRequest,
     this.requestItemCount,
+  }) : super(key: key);
+
+  SearchableDropdown.future({
+    Key? key,
+    this.hintText,
+    this.backgroundDecoration,
+    this.searchHintText,
+    this.noRecordText,
+    this.dropDownMaxHeight,
+    this.margin,
+    this.trailingIcon,
+    this.leadingIcon,
+    this.isEnabled = true,
+    this.disabledOnTap,
+    this.onChanged,
+    required this.futureRequest,
   }) : super(key: key);
 
   @override
@@ -97,7 +116,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
   @override
   void initState() {
     controller = SearcableDropdownController<T>();
-    controller.getRequestFunc = widget.getRequest;
+    controller.paginatedRequest = widget.paginatedRequest;
+    controller.futureRequest = widget.futureRequest;
     controller.requestItemCount = widget.requestItemCount ?? 0;
     controller.items = widget.items;
     controller.searchedItems.value = widget.items;
@@ -177,7 +197,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       }
     }
     if (widget.items == null) {
-      controller.getRequest(page: 1, isNewSearch: true);
+      if (widget.paginatedRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
+      if (widget.futureRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
     } else {
       controller.searchedItems.value = widget.items;
     }
@@ -255,9 +276,9 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
             return;
           }
           if (value == '') {
-            controller.getRequest(page: 1, isNewSearch: true);
+            controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
           } else {
-            controller.getRequest(page: 1, key: value, isNewSearch: true);
+            controller.getItemsWithPaginatedRequest(page: 1, key: value, isNewSearch: true);
           }
         },
       ),

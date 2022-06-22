@@ -40,8 +40,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   ///Dropdown items
   List<SearchableDropdownMenuItem<T>>? items;
 
-  ///Paginated or normal request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? getRequest;
+  ///Paginated request service which is returns DropdownMenuItem list
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+
+  ///Future service which is returns DropdownMenuItem list
+  Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   ///Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   int? requestItemCount;
@@ -106,7 +109,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.margin,
     this.isEnabled = false,
     this.disabledOnTap,
-    required this.getRequest,
+    required this.paginatedRequest,
     this.requestItemCount,
     this.errorWidget,
     this.backgroundDecoration,
@@ -126,7 +129,56 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                     hintText: hintText,
                     margin: EdgeInsets.zero,
                     requestItemCount: requestItemCount,
-                    getRequest: getRequest,
+                    paginatedRequest: paginatedRequest,
+                    onChanged: (value) {
+                      state.didChange(value);
+                    },
+                  ),
+                  if (state.hasError)
+                    errorWidget != null
+                        ? errorWidget(state.errorText)
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Text(
+                              state.errorText ?? '',
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          )
+                ],
+              ),
+            );
+          },
+        );
+  SearchableDropdownFormField.future({
+    super.key,
+    super.onSaved,
+    super.validator,
+    super.initialValue,
+    super.autovalidateMode,
+    this.hintText,
+    this.margin,
+    this.isEnabled = false,
+    this.disabledOnTap,
+    required this.futureRequest,
+    this.requestItemCount,
+    this.errorWidget,
+    this.backgroundDecoration,
+    this.onChanged,
+    this.noRecordText,
+    this.icon,
+    this.searchHintText,
+  }) : super(
+          builder: (FormFieldState<T> state) {
+            return Padding(
+              padding: margin ?? const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SearchableDropdown<T>.future(
+                    backgroundDecoration: backgroundDecoration,
+                    hintText: hintText,
+                    margin: EdgeInsets.zero,
+                    futureRequest: futureRequest,
                     onChanged: (value) {
                       state.didChange(value);
                     },

@@ -17,7 +17,8 @@ class SearcableDropdownController<T> {
 
   final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> itemList = ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
 
-  late Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? getRequestFunc;
+  late Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? paginatedRequest;
+  late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   late int requestItemCount;
 
@@ -30,12 +31,13 @@ class SearcableDropdownController<T> {
   String searchText = '';
 
   void onInit() {
+    if (paginatedRequest == null) return;
     scrollController.addListener(() {
       if (scrollController.position.atEdge && scrollController.position.pixels != 0) {
         if (searchText.isNotEmpty) {
-          getRequest(page: _page, key: searchText);
+          getItemsWithPaginatedRequest(page: _page, key: searchText);
         } else {
-          getRequest(page: _page);
+          getItemsWithPaginatedRequest(page: _page);
         }
       }
     });
@@ -46,32 +48,37 @@ class SearcableDropdownController<T> {
     scrollController.dispose();
   }
 
-  Future<void> getRequest({required int page, String? key, bool isNewSearch = false}) async {
-    if (getRequestFunc == null) return;
+  Future<void> getItemsWithPaginatedRequest({required int page, String? key, bool isNewSearch = false}) async {
+    if (paginatedRequest == null) return;
     if (isNewSearch) {
       _page = 1;
       itemList.value = null;
       _hasMoreData = true;
     }
     if (!_hasMoreData) return;
-    try {
-      state.value = SearcableDropdownState.Busy;
-      final response = await getRequestFunc!(page, key);
-      if (response is! List<SearchableDropdownMenuItem<T>>) return;
-      itemList.value ??= [];
-      itemList.value = itemList.value! + response;
-      if (response.length < requestItemCount) {
-        _hasMoreData = false;
-      } else {
-        _page = _page + 1;
-      }
-      state.value = SearcableDropdownState.Loaded;
+    state.value = SearcableDropdownState.Busy;
+    final response = await paginatedRequest!(page, key);
+    if (response is! List<SearchableDropdownMenuItem<T>>) return;
 
-      debugPrint('searchable dropdown has more data: $_hasMoreData');
-    } catch (exception) {
-      state.value = SearcableDropdownState.Error;
-      throw Exception(exception);
+    itemList.value ??= [];
+    itemList.value = itemList.value! + response;
+    if (response.length < requestItemCount) {
+      _hasMoreData = false;
+    } else {
+      _page = _page + 1;
     }
+    state.value = SearcableDropdownState.Loaded;
+    debugPrint('searchable dropdown has more data: $_hasMoreData');
+  }
+
+  Future<void> getItemsWithFutureRequest() async {
+    if (futureRequest == null) return;
+
+    state.value = SearcableDropdownState.Busy;
+    final response = await futureRequest!();
+    if (response is! List<SearchableDropdownMenuItem<T>>) return;
+    items = response;
+    state.value = SearcableDropdownState.Loaded;
   }
 
   void fillSearchedList(String? value) {
