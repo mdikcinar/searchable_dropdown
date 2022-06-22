@@ -67,6 +67,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.items,
     this.value,
     this.isEnabled = true,
+    this.disabledOnTap,
   }) : super(key: key);
 
   SearchableDropdown.paginated({
@@ -80,6 +81,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.trailingIcon,
     this.leadingIcon,
     this.isEnabled = true,
+    this.disabledOnTap,
     this.onChanged,
     required this.getRequest,
     this.requestItemCount,
