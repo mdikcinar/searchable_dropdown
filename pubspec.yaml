@@ -1,4 +1,4 @@
-name: searchable_dropdown
+name: searchable_paginated_dropdown
 description: Flutter searchable dropdown widget which can be used also with paginated requests.
 version: 0.0.1
 homepage: https://github.com/mdikcinar/searchable_dropdown

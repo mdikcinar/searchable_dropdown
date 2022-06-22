@@ -1,4 +1,4 @@
-library searchable_dropdown;
+library searchable_paginated_dropdown;
 
 export 'src/searchable_dropdown_view.dart';
 export 'src/serachable_dropdown_formfield.dart';

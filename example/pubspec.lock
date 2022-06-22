@@ -233,7 +233,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
-  searchable_dropdown:
+  searchable_paginated_dropdown:
     dependency: "direct main"
     description:
       path: ".."

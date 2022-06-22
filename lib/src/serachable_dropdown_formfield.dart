@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../searchable_dropdown.dart';
+import '../searchable_paginated_dropdown.dart';
 
 // ignore: must_be_immutable
 class SearchableDropdownFormField<T> extends FormField<T> {

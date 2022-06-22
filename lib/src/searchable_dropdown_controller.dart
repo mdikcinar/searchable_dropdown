@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:searchable_dropdown/src/model/searchable_dropdown_menu_item.dart';
+
+import '../searchable_paginated_dropdown.dart';
 
 // ignore: constant_identifier_names
 enum SearcableDropdownState { Initial, Busy, Error, Loaded }

@@ -1,6 +1,6 @@
 import 'package:example/model/pagination_model.dart';
 import 'package:flutter/material.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
 import 'package:vexana/vexana.dart';
 
 import '../service/network_service.dart';
