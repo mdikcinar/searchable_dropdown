@@ -136,6 +136,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     }
     if (widget.items == null) {
       controller.getRequest(page: 1, isNewSearch: true);
+    } else {
+      controller.searchedItems.value = widget.items;
     }
     //Hesaplamaları yaptıktan sonra dialogu göster
     //Show the dialog
