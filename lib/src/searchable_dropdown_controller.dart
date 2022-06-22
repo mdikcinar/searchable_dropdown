@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../searchable_paginated_dropdown.dart';
+import 'extensions/string_extension.dart';
 
 // ignore: constant_identifier_names
 enum SearcableDropdownState { Initial, Busy, Error, Loaded }
@@ -78,7 +79,7 @@ class SearcableDropdownController<T> {
 
     List<SearchableDropdownMenuItem<T>> tempList = [];
     for (var element in items ?? <SearchableDropdownMenuItem<T>>[]) {
-      if (element.label.contains(value!)) tempList.add(element);
+      if (element.label.containsWithTurkishChars(value!)) tempList.add(element);
     }
     searchedItems.value = tempList;
   }
