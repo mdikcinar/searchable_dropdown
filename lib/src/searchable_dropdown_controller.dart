@@ -6,23 +6,28 @@ import '../searchable_paginated_dropdown.dart';
 enum SearcableDropdownState { Initial, Busy, Error, Loaded }
 
 class SearcableDropdownController<T> {
-  final ValueNotifier<SearcableDropdownState> state = ValueNotifier<SearcableDropdownState>(SearcableDropdownState.Initial);
+  final ValueNotifier<SearcableDropdownState> state =
+      ValueNotifier<SearcableDropdownState>(SearcableDropdownState.Initial);
 
   ScrollController scrollController = ScrollController();
   GlobalKey key = GlobalKey();
   FocusNode searchFocusNode = FocusNode();
 
-  final ValueNotifier<SearchableDropdownMenuItem<T>?> selectedItem = ValueNotifier<SearchableDropdownMenuItem<T>?>(null);
+  final ValueNotifier<SearchableDropdownMenuItem<T>?> selectedItem =
+      ValueNotifier<SearchableDropdownMenuItem<T>?>(null);
 
-  final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> itemList = ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
+  final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> itemList =
+      ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
 
-  late Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? getRequestFunc;
+  late Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? key)? getRequestFunc;
 
   late int requestItemCount;
 
   late List<SearchableDropdownMenuItem<T>>? items;
 
-  ValueNotifier<List<SearchableDropdownMenuItem<T>>?> searchedItems = ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
+  ValueNotifier<List<SearchableDropdownMenuItem<T>>?> searchedItems =
+      ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
 
   bool _hasMoreData = true;
   int _page = 1;
@@ -30,7 +35,8 @@ class SearcableDropdownController<T> {
 
   void onInit() {
     scrollController.addListener(() {
-      if (scrollController.position.atEdge && scrollController.position.pixels != 0) {
+      if (scrollController.position.atEdge &&
+          scrollController.position.pixels != 0) {
         if (searchText.isNotEmpty) {
           getRequest(page: _page, key: searchText);
         } else {
@@ -45,7 +51,8 @@ class SearcableDropdownController<T> {
     scrollController.dispose();
   }
 
-  Future<void> getRequest({required int page, String? key, bool isNewSearch = false}) async {
+  Future<void> getRequest(
+      {required int page, String? key, bool isNewSearch = false}) async {
     if (getRequestFunc == null) return;
     if (isNewSearch) {
       _page = 1;

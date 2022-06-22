@@ -15,14 +15,19 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
     return Column(
       children: [
         Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           child: SearchableDropdown<int>.paginated(
             hintText: const Text('Search Anime'),
             margin: const EdgeInsets.all(15),
             getRequest: (int page, String? searchKey) async {
-              final paginatedList = await getAnimeList(page: page, key: searchKey);
+              final paginatedList =
+                  await getAnimeList(page: page, key: searchKey);
               return paginatedList?.animeList
-                  ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+                  ?.map((e) => SearchableDropdownMenuItem(
+                      value: e.malId,
+                      label: e.title ?? '',
+                      child: Text(e.title ?? '')))
                   .toList();
             },
             requestItemCount: 10,
@@ -33,11 +38,15 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           child: SearchableDropdown<int>(
             hintText: const Text('List of items'),
             margin: const EdgeInsets.all(15),
-            items: List.generate(10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+            items: List.generate(
+                10,
+                (i) => SearchableDropdownMenuItem(
+                    value: i, label: 'item $i', child: Text('item $i'))),
             onChanged: (int? value) {
               debugPrint('$value');
             },
@@ -58,7 +67,10 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
             ),
             hintText: const Text('Search Anime'),
             margin: const EdgeInsets.all(15),
-            items: List.generate(10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+            items: List.generate(
+                10,
+                (i) => SearchableDropdownMenuItem(
+                    value: i, label: 'item $i', child: Text('item $i'))),
             validator: (val) {
               if (val == null) return 'Cant be empty';
               return null;
@@ -80,11 +92,13 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
     );
   }
 
-  Future<AnimePaginatedList?> getAnimeList({required int page, String? key}) async {
+  Future<AnimePaginatedList?> getAnimeList(
+      {required int page, String? key}) async {
     try {
       String url = "https://api.jikan.moe/v4/anime?page=$page";
       if (key != null && key.isNotEmpty) url += "&q=$key";
-      var response = await NetworkService.instance.networkManager.send<AnimePaginatedList, AnimePaginatedList>(
+      var response = await NetworkService.instance.networkManager
+          .send<AnimePaginatedList, AnimePaginatedList>(
         url,
         parseModel: AnimePaginatedList(),
         method: RequestType.GET,

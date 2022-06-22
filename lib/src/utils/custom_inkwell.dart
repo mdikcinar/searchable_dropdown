@@ -5,7 +5,12 @@ class CustomInkwell extends StatelessWidget {
   final EdgeInsets? padding;
   final Widget child;
   final bool disableTabEfect;
-  const CustomInkwell({Key? key, required this.onTap, required this.child, this.padding, this.disableTabEfect = false})
+  const CustomInkwell(
+      {Key? key,
+      required this.onTap,
+      required this.child,
+      this.padding,
+      this.disableTabEfect = false})
       : super(key: key);
 
   @override
@@ -15,9 +20,11 @@ class CustomInkwell extends StatelessWidget {
       splashColor: disableTabEfect ? Colors.transparent : null,
       highlightColor: disableTabEfect ? Colors.transparent : null,
       onTap: onTap,
-      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.015),
+      borderRadius:
+          BorderRadius.circular(MediaQuery.of(context).size.height * 0.015),
       child: Padding(
-        padding: padding ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+        padding: padding ??
+            EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
         child: child,
       ),
     );

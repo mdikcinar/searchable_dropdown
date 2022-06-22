@@ -20,7 +20,7 @@ And also provides a feature for compatibility with paginated searchable requests
 - SearchableDropdown.paginated for normal or paginated requests.
 - SearchableDropdownFormfield for compatibility with forms.
 
-![alt text](doc/gif.gif)
+![alt text](https://github.com/mdikcinar/searchable_dropdown/raw/main/doc/gif.gif)
 
 ## Getting started
 
