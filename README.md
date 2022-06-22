@@ -16,9 +16,9 @@ And also provides a feature for compatibility with paginated searchable requests
 
 ## Features
 
--SearchableDropdown for pre setted item list,
--SearchableDropdown.paginated for normal or paginated requests.
--SearchableDropdownFormfield for compatibility with forms.
+- SearchableDropdown for pre setted item list,
+- SearchableDropdown.paginated for normal or paginated requests.
+- SearchableDropdownFormfield for compatibility with forms.
 
 ![alt text](doc/gif.gif)
 
@@ -46,7 +46,8 @@ SearchableDropdown<int>(
 ```
 
 Paginated request example, you can also give a request that fetches all items.
--requestItemCount: Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
+
+- requestItemCount: Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
 
 ```dart
 SearchableDropdown<int>.paginated(
@@ -66,7 +67,8 @@ SearchableDropdown<int>.paginated(
 ```
 
 Example of usage inside a form.
--backgroundDecoration: Background decoration of dropdown, i.e. with this you can wrap dropdown with Card
+
+- backgroundDecoration: Background decoration of dropdown, i.e. with this you can wrap dropdown with Card
 
 ```dart
 Form(
