@@ -32,6 +32,9 @@ class SearchableDropdown<T> extends StatefulWidget {
   ///Returns selected Item
   final void Function(T? value)? onChanged;
 
+  //Initial value of dropdown
+  T? value;
+
   ///Dropdown items
   List<SearchableDropdownMenuItem<T>>? items;
 
@@ -52,6 +55,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.icon,
     this.onChanged,
     this.items,
+    this.value,
   }) : super(key: key);
 
   SearchableDropdown.paginated({
@@ -82,6 +86,12 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     controller.requestItemCount = widget.requestItemCount ?? 0;
     controller.items = widget.items;
     controller.searchedItems.value = widget.items;
+    for (var element in widget.items ?? <SearchableDropdownMenuItem<T>>[]) {
+      if (element.value == widget.value) {
+        controller.selectedItem.value = element;
+        return;
+      }
+    }
     controller.onInit();
     super.initState();
   }
