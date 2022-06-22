@@ -18,7 +18,10 @@ class SearchableDropdown<T> extends StatefulWidget {
   final Widget? noRecordText;
 
   ///Dropdown trailing icon
-  final Widget? icon;
+  final Widget? trailingIcon;
+
+  ///Dropdown trailing icon
+  final Widget? leadingIcon;
 
   ///Searchbar hint text
   final String? searchHintText;
@@ -52,7 +55,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.noRecordText,
     this.dropDownMaxHeight,
     this.margin,
-    this.icon,
+    this.trailingIcon,
+    this.leadingIcon,
     this.onChanged,
     this.items,
     this.value,
@@ -66,7 +70,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.noRecordText,
     this.dropDownMaxHeight,
     this.margin,
-    this.icon,
+    this.trailingIcon,
+    this.leadingIcon,
     this.onChanged,
     required this.getRequest,
     this.requestItemCount,
@@ -114,8 +119,18 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         padding: widget.margin ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
         child: Row(
           children: [
-            Expanded(child: dropDownText(controller)),
-            widget.icon ??
+            Expanded(
+                child: Row(
+              children: [
+                if (widget.leadingIcon != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 3.0),
+                    child: widget.leadingIcon!,
+                  ),
+                dropDownText(controller),
+              ],
+            )),
+            widget.trailingIcon ??
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
                   size: MediaQuery.of(context).size.height * 0.033,
