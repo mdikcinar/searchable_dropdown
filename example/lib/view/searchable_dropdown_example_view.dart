@@ -19,8 +19,8 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
           child: SearchableDropdown<int>.paginated(
             hintText: const Text('Search Anime'),
             margin: const EdgeInsets.all(15),
-            getRequest: (page, key) async {
-              final paginatedList = await getAnimeList(page: page, key: key);
+            getRequest: (int page, String? searchKey) async {
+              final paginatedList = await getAnimeList(page: page, key: searchKey);
               return paginatedList?.animeList
                   ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
                   .toList();
@@ -35,7 +35,7 @@ class SearchAbleDropdownExampleView extends StatelessWidget {
         Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           child: SearchableDropdown<int>(
-            hintText: const Text('Search Anime'),
+            hintText: const Text('List of items'),
             margin: const EdgeInsets.all(15),
             items: List.generate(10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
             onChanged: (int? value) {

@@ -36,7 +36,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   List<SearchableDropdownMenuItem<T>>? items;
 
   ///Paginated or normal request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? getRequest;
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? getRequest;
 
   ///Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   int? requestItemCount;
