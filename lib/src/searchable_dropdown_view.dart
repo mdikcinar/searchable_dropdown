@@ -124,6 +124,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   GestureDetector buildDropDown(SearcableDropdownController<T> controller) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.isEnabled) {
           _dropDownOnTab(controller);
