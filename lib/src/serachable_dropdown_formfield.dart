@@ -28,6 +28,15 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   ///Returns selected Item
   final void Function(T? value)? onChanged;
 
+  //Initial value of dropdown
+  T? value;
+
+  //Is dropdown enabled
+  bool isEnabled;
+
+  //Triggers this function if dropdown pressed while disabled
+  VoidCallback? disabledOnTap;
+
   ///Dropdown items
   List<SearchableDropdownMenuItem<T>>? items;
 
@@ -45,6 +54,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     super.autovalidateMode,
     this.hintText,
     this.margin,
+    this.value,
+    this.isEnabled = false,
+    this.disabledOnTap,
     required this.items,
     this.errorWidget,
     this.backgroundDecoration,
@@ -92,6 +104,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     super.autovalidateMode,
     this.hintText,
     this.margin,
+    this.isEnabled = false,
+    this.disabledOnTap,
     required this.getRequest,
     this.requestItemCount,
     this.errorWidget,

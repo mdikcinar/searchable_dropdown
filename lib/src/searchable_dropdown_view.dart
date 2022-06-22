@@ -38,6 +38,12 @@ class SearchableDropdown<T> extends StatefulWidget {
   //Initial value of dropdown
   T? value;
 
+  //Is dropdown enabled
+  bool isEnabled;
+
+  //Triggers this function if dropdown pressed while disabled
+  VoidCallback? disabledOnTap;
+
   ///Dropdown items
   List<SearchableDropdownMenuItem<T>>? items;
 
@@ -60,6 +66,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.onChanged,
     this.items,
     this.value,
+    this.isEnabled = true,
   }) : super(key: key);
 
   SearchableDropdown.paginated({
@@ -72,6 +79,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.margin,
     this.trailingIcon,
     this.leadingIcon,
+    this.isEnabled = true,
     this.onChanged,
     required this.getRequest,
     this.requestItemCount,
@@ -114,7 +122,13 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   GestureDetector buildDropDown(SearcableDropdownController<T> controller) {
     return GestureDetector(
-      onTap: () => _dropDownOnTab(controller),
+      onTap: () {
+        if (widget.isEnabled) {
+          _dropDownOnTab(controller);
+        } else if (widget.disabledOnTap != null) {
+          widget.disabledOnTap!();
+        }
+      },
       child: Padding(
         padding: widget.margin ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
         child: Row(
