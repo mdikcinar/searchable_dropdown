@@ -31,9 +31,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   ///Dropdowns margin padding with other widgets
   final EdgeInsetsGeometry? margin;
 
-  ///Returns selected Item
-  final void Function(T? value)? onChanged;
-
   //Initial value of dropdown
   T? value;
 
@@ -69,7 +66,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     required this.items,
     this.errorWidget,
     this.backgroundDecoration,
-    this.onChanged,
     this.noRecordText,
     this.trailingIcon,
     this.leadingIcon,
@@ -129,7 +125,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.requestItemCount,
     this.errorWidget,
     this.backgroundDecoration,
-    this.onChanged,
     this.noRecordText,
     this.trailingIcon,
     this.leadingIcon,
@@ -189,7 +184,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.requestItemCount,
     this.errorWidget,
     this.backgroundDecoration,
-    this.onChanged,
     this.noRecordText,
     this.trailingIcon,
     this.leadingIcon,
