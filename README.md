@@ -17,7 +17,8 @@ And also provides a feature for compatibility with paginated searchable requests
 ## Features
 
 - SearchableDropdown for pre setted item list,
-- SearchableDropdown.paginated for normal or paginated requests.
+- SearchableDropdown.paginated for paginated requests.
+- SearchableDropdown.future for normal requests.
 - SearchableDropdownFormfield for compatibility with forms.
 
 ![](https://github.com/mdikcinar/searchable_dropdown/raw/main/doc/gif.gif)
