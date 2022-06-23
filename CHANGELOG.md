@@ -1,3 +1,5 @@
+## 0.0.4
+* Missing properties added to dropdown form field
 ## 0.0.3
 
 * Future and paginated requests seperated
