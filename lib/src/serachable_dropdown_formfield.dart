@@ -95,6 +95,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                     isEnabled: isEnabled,
                     disabledOnTap: disabledOnTap,
                     items: items,
+                    value: value,
                     onChanged: (value) {
                       state.didChange(value);
                       if (onChanged != null) onChanged(value);
