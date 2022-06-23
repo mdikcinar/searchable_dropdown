@@ -7,7 +7,9 @@ class AnimePaginatedList extends INetworkModel {
   AnimePaginatedList({this.pagination, this.animeList});
 
   AnimePaginatedList.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? Pagination.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       animeList = <Anime>[];
       json['data'].forEach((v) {
@@ -38,7 +40,8 @@ class Pagination {
   int? currentPage;
   Items? items;
 
-  Pagination({this.lastVisiblePage, this.hasNextPage, this.currentPage, this.items});
+  Pagination(
+      {this.lastVisiblePage, this.hasNextPage, this.currentPage, this.items});
 
   Pagination.fromJson(Map<String, dynamic> json) {
     lastVisiblePage = json['last_visible_page'];

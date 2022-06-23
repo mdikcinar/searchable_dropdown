@@ -75,15 +75,18 @@ class CustomSearchBar extends StatelessWidget {
       child: isOutlined
           ? Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.01),
-                border: Border.all(color: (style?.color ?? Colors.black).withOpacity(0.5)),
+                borderRadius: BorderRadius.circular(
+                    MediaQuery.of(context).size.height * 0.01),
+                border: Border.all(
+                    color: (style?.color ?? Colors.black).withOpacity(0.5)),
               ),
               child: _buildTextField(),
             )
           : Card(
               margin: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.height * 0.015))),
+                  borderRadius: BorderRadius.all(Radius.circular(
+                      MediaQuery.of(context).size.height * 0.015))),
               child: _buildTextField(),
             ),
     );

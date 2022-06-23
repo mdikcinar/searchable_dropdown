@@ -41,7 +41,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   List<SearchableDropdownMenuItem<T>>? items;
 
   ///Paginated request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? searchKey)? paginatedRequest;
 
   ///Future service which is returns DropdownMenuItem list
   Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
