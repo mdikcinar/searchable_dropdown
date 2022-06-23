@@ -20,7 +20,7 @@ And also provides a feature for compatibility with paginated searchable requests
 - SearchableDropdown.paginated for normal or paginated requests.
 - SearchableDropdownFormfield for compatibility with forms.
 
-![alt text](doc/gif.gif)
+![](https://github.com/mdikcinar/searchable_dropdown/raw/main/doc/gif.gif)
 
 ## Getting started
 
@@ -45,13 +45,13 @@ SearchableDropdown<int>(
 )
 ```
 
-Paginated request example, you can also give a request that fetches all items.
+Paginated request example
 
 - requestItemCount: Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
 
 ```dart
 SearchableDropdown<int>.paginated(
-    hintText: const Text('Search Anime'),
+    hintText: const Text('Paginated request'),
     margin: const EdgeInsets.all(15),
     getRequest: (int page, String? searchKey) async {
         final paginatedList = await getAnimeList(page: page, key: searchKey);
@@ -59,7 +59,24 @@ SearchableDropdown<int>.paginated(
             ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
             .toList();
     },
-    requestItemCount: 10,
+    requestItemCount: 25,
+    onChanged: (int? value) {
+        debugPrint('$value');
+    },
+)
+```
+Future request example
+
+```dart
+SearchableDropdown<int>.future(
+    hintText: const Text('Future request'),
+    margin: const EdgeInsets.all(15),
+    futureRequest: () async {
+        final paginatedList = await getAnimeList(page: 1, key: '');
+        return paginatedList?.animeList
+            ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+            .toList();
+    },
     onChanged: (int? value) {
         debugPrint('$value');
     },

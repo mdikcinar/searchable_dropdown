@@ -15,7 +15,8 @@ class SearcableDropdownController<T> {
 
   final ValueNotifier<SearchableDropdownMenuItem<T>?> selectedItem = ValueNotifier<SearchableDropdownMenuItem<T>?>(null);
 
-  final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> itemList = ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
+  final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> paginatedItemList =
+      ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
 
   late Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? paginatedRequest;
   late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
@@ -52,7 +53,7 @@ class SearcableDropdownController<T> {
     if (paginatedRequest == null) return;
     if (isNewSearch) {
       _page = 1;
-      itemList.value = null;
+      paginatedItemList.value = null;
       _hasMoreData = true;
     }
     if (!_hasMoreData) return;
@@ -60,8 +61,8 @@ class SearcableDropdownController<T> {
     final response = await paginatedRequest!(page, key);
     if (response is! List<SearchableDropdownMenuItem<T>>) return;
 
-    itemList.value ??= [];
-    itemList.value = itemList.value! + response;
+    paginatedItemList.value ??= [];
+    paginatedItemList.value = paginatedItemList.value! + response;
     if (response.length < requestItemCount) {
       _hasMoreData = false;
     } else {
@@ -78,6 +79,7 @@ class SearcableDropdownController<T> {
     final response = await futureRequest!();
     if (response is! List<SearchableDropdownMenuItem<T>>) return;
     items = response;
+    searchedItems.value = response;
     state.value = SearcableDropdownState.Loaded;
   }
 

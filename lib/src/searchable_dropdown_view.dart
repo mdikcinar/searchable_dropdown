@@ -196,11 +196,11 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         dialogPossitionFromBottom -= MediaQuery.of(context).size.height * 0.005;
       }
     }
-    if (widget.items == null) {
+    if (controller.items == null) {
       if (widget.paginatedRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
-      if (widget.futureRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
+      if (widget.futureRequest != null) controller.getItemsWithFutureRequest();
     } else {
-      controller.searchedItems.value = widget.items;
+      controller.searchedItems.value = controller.items;
     }
     //Hesaplamaları yaptıktan sonra dialogu göster
     //Show the dialog
@@ -271,7 +271,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         leadingIcon: Icon(Icons.search, size: MediaQuery.of(context).size.height * 0.033),
         onChangeComplete: (value) {
           controller.searchText = value;
-          if (widget.items != null) {
+          if (controller.items != null) {
             controller.fillSearchedList(value);
             return;
           }
@@ -287,7 +287,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   Widget buildListView(SearcableDropdownController<T> controller, bool isReversed) {
     return ValueListenableBuilder(
-      valueListenable: (widget.items == null ? controller.itemList : controller.searchedItems),
+      valueListenable: (widget.paginatedRequest != null ? controller.paginatedItemList : controller.searchedItems),
       builder: (context, List<SearchableDropdownMenuItem<T>>? itemList, child) => itemList == null
           ? const Center(child: CircularProgressIndicator())
           : itemList.isEmpty
