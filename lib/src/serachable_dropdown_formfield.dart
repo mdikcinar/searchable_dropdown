@@ -4,6 +4,9 @@ import '../searchable_paginated_dropdown.dart';
 
 // ignore: must_be_immutable
 class SearchableDropdownFormField<T> extends FormField<T> {
+  ///Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3
+  final double? dropDownMaxHeight;
+
   ///Hint text shown when the dropdown is empty
   final Widget? hintText;
 
@@ -17,7 +20,10 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   final Widget? noRecordText;
 
   ///Dropdown trailing icon
-  final Widget? icon;
+  final Widget? trailingIcon;
+
+  ///Dropdown trailing icon
+  final Widget? leadingIcon;
 
   ///Searchbar hint text
   final String? searchHintText;
@@ -41,8 +47,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   List<SearchableDropdownMenuItem<T>>? items;
 
   ///Paginated request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
 
   ///Future service which is returns DropdownMenuItem list
   Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
@@ -66,8 +71,10 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.backgroundDecoration,
     this.onChanged,
     this.noRecordText,
-    this.icon,
+    this.trailingIcon,
+    this.leadingIcon,
     this.searchHintText,
+    this.dropDownMaxHeight,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -76,9 +83,17 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchableDropdown<T>(
+                    key: key,
                     backgroundDecoration: backgroundDecoration,
                     hintText: hintText,
                     margin: EdgeInsets.zero,
+                    leadingIcon: leadingIcon,
+                    trailingIcon: trailingIcon,
+                    noRecordText: noRecordText,
+                    dropDownMaxHeight: dropDownMaxHeight,
+                    searchHintText: searchHintText,
+                    isEnabled: isEnabled,
+                    disabledOnTap: disabledOnTap,
                     items: items,
                     onChanged: (value) {
                       state.didChange(value);
@@ -116,8 +131,10 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.backgroundDecoration,
     this.onChanged,
     this.noRecordText,
-    this.icon,
+    this.trailingIcon,
+    this.leadingIcon,
     this.searchHintText,
+    this.dropDownMaxHeight,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -126,9 +143,17 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchableDropdown<T>.paginated(
+                    key: key,
                     backgroundDecoration: backgroundDecoration,
                     hintText: hintText,
                     margin: EdgeInsets.zero,
+                    leadingIcon: leadingIcon,
+                    trailingIcon: trailingIcon,
+                    noRecordText: noRecordText,
+                    dropDownMaxHeight: dropDownMaxHeight,
+                    searchHintText: searchHintText,
+                    isEnabled: isEnabled,
+                    disabledOnTap: disabledOnTap,
                     requestItemCount: requestItemCount,
                     paginatedRequest: paginatedRequest,
                     onChanged: (value) {
@@ -166,8 +191,10 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.backgroundDecoration,
     this.onChanged,
     this.noRecordText,
-    this.icon,
+    this.trailingIcon,
+    this.leadingIcon,
     this.searchHintText,
+    this.dropDownMaxHeight,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -176,9 +203,17 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SearchableDropdown<T>.future(
+                    key: key,
                     backgroundDecoration: backgroundDecoration,
                     hintText: hintText,
                     margin: EdgeInsets.zero,
+                    leadingIcon: leadingIcon,
+                    trailingIcon: trailingIcon,
+                    noRecordText: noRecordText,
+                    dropDownMaxHeight: dropDownMaxHeight,
+                    searchHintText: searchHintText,
+                    isEnabled: isEnabled,
+                    disabledOnTap: disabledOnTap,
                     futureRequest: futureRequest,
                     onChanged: (value) {
                       state.didChange(value);
