@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                       ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
                       .toList();
                 },
-                requestItemCount: 10,
+                requestItemCount: 25,
                 onChanged: (int? value) {
                   debugPrint('$value');
                 },

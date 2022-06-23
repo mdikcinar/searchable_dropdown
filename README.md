@@ -54,7 +54,7 @@ Paginated request example
 SearchableDropdown<int>.paginated(
     hintText: const Text('Paginated request'),
     margin: const EdgeInsets.all(15),
-    getRequest: (int page, String? searchKey) async {
+    paginatedRequest: (int page, String? searchKey) async {
         final paginatedList = await getAnimeList(page: page, key: searchKey);
         return paginatedList?.animeList
             ?.map((e) => SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
