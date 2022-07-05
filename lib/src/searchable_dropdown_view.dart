@@ -48,8 +48,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   List<SearchableDropdownMenuItem<T>>? items;
 
   ///Paginated request service which is returns DropdownMenuItem list
-  Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+  Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
 
   ///Future service which is returns DropdownMenuItem list
   Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
@@ -154,8 +153,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         }
       },
       child: Padding(
-        padding: widget.margin ??
-            EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+        padding: widget.margin ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
         child: Row(
           children: [
             Expanded(
@@ -166,7 +164,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                     padding: const EdgeInsets.only(right: 3.0),
                     child: widget.leadingIcon!,
                   ),
-                dropDownText(controller),
+                Flexible(child: dropDownText(controller)),
               ],
             )),
             widget.trailingIcon ??
@@ -183,14 +181,10 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
   _dropDownOnTab(SearcableDropdownController<T> controller) {
     bool isReversed = false;
     double? possitionFromBottom = controller.key.globalPaintBounds != null
-        ? MediaQuery.of(context).size.height -
-            controller.key.globalPaintBounds!.bottom
+        ? MediaQuery.of(context).size.height - controller.key.globalPaintBounds!.bottom
         : null;
-    double alertDialogMaxHeight =
-        widget.dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.3;
-    double? dialogPossitionFromBottom = possitionFromBottom != null
-        ? possitionFromBottom - alertDialogMaxHeight
-        : null;
+    double alertDialogMaxHeight = widget.dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.3;
+    double? dialogPossitionFromBottom = possitionFromBottom != null ? possitionFromBottom - alertDialogMaxHeight : null;
     if (dialogPossitionFromBottom != null) {
       //Dialog ekrana sığmıyor ise reverseler
       //If dialog couldn't fit the screen, reverse it
@@ -204,8 +198,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       }
     }
     if (controller.items == null) {
-      if (widget.paginatedRequest != null)
-        controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
+      if (widget.paginatedRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
       if (widget.futureRequest != null) controller.getItemsWithFutureRequest();
     } else {
       controller.searchedItems.value = controller.items;
@@ -219,10 +212,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
         //Keyboard varsa digalogu ofsetler
         //If keyboard pushes the dialog, recalculate the dialog's possition.
-        if (reCalculatePosition != null &&
-            reCalculatePosition <= keyboardHeight) {
-          reCalculatePosition =
-              (keyboardHeight - reCalculatePosition) + reCalculatePosition;
+        if (reCalculatePosition != null && reCalculatePosition <= keyboardHeight) {
+          reCalculatePosition = (keyboardHeight - reCalculatePosition) + reCalculatePosition;
         }
         return Padding(
           padding: EdgeInsets.only(
@@ -245,22 +236,18 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Widget _buildStatefullDropdownCard(
-      SearcableDropdownController<T> controller, bool isReversed) {
+  Widget _buildStatefullDropdownCard(SearcableDropdownController<T> controller, bool isReversed) {
     return Column(
-      mainAxisAlignment:
-          isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Flexible(
           child: Card(
             margin: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(
-                    MediaQuery.of(context).size.height * 0.015))),
+                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.height * 0.015))),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              verticalDirection:
-                  isReversed ? VerticalDirection.up : VerticalDirection.down,
+              verticalDirection: isReversed ? VerticalDirection.up : VerticalDirection.down,
               children: [
                 buildSearchBar(controller),
                 Flexible(
@@ -282,8 +269,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         changeCompletionDelay: const Duration(milliseconds: 200),
         hintText: widget.searchHintText ?? 'Search',
         isOutlined: true,
-        leadingIcon: Icon(Icons.search,
-            size: MediaQuery.of(context).size.height * 0.033),
+        leadingIcon: Icon(Icons.search, size: MediaQuery.of(context).size.height * 0.033),
         onChangeComplete: (value) {
           controller.searchText = value;
           if (controller.items != null) {
@@ -293,68 +279,60 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
           if (value == '') {
             controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
           } else {
-            controller.getItemsWithPaginatedRequest(
-                page: 1, key: value, isNewSearch: true);
+            controller.getItemsWithPaginatedRequest(page: 1, key: value, isNewSearch: true);
           }
         },
       ),
     );
   }
 
-  Widget buildListView(
-      SearcableDropdownController<T> controller, bool isReversed) {
+  Widget buildListView(SearcableDropdownController<T> controller, bool isReversed) {
     return ValueListenableBuilder(
-      valueListenable: (widget.paginatedRequest != null
-          ? controller.paginatedItemList
-          : controller.searchedItems),
-      builder: (context, List<SearchableDropdownMenuItem<T>>? itemList,
-              child) =>
-          itemList == null
-              ? const Center(child: CircularProgressIndicator())
-              : itemList.isEmpty
-                  ? Padding(
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.height * 0.015),
-                      child: widget.noRecordText ?? const Text('No record'),
-                    )
-                  : Scrollbar(
-                      thumbVisibility: true,
-                      controller: controller.scrollController,
-                      child: ListView.builder(
-                        controller: controller.scrollController,
-                        padding: _listviewPadding(isReversed),
-                        itemCount: itemList.length + 1,
-                        shrinkWrap: true,
-                        reverse: isReversed,
-                        itemBuilder: (context, index) {
-                          if (index < itemList.length) {
-                            final item = itemList.elementAt(index);
-                            return CustomInkwell(
-                              child: item.child,
-                              onTap: () {
-                                controller.selectedItem.value = item;
-                                if (widget.onChanged != null) {
-                                  widget.onChanged!(item.value);
-                                }
-                                Navigator.pop(context);
-                                if (item.onTap != null) item.onTap!();
-                              },
-                            );
-                          } else {
-                            return ValueListenableBuilder(
-                              valueListenable: controller.state,
-                              builder: (context, SearcableDropdownState state,
-                                      child) =>
-                                  state == SearcableDropdownState.Busy
-                                      ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : const SizedBox(),
-                            );
-                          }
-                        },
-                      ),
-                    ),
+      valueListenable: (widget.paginatedRequest != null ? controller.paginatedItemList : controller.searchedItems),
+      builder: (context, List<SearchableDropdownMenuItem<T>>? itemList, child) => itemList == null
+          ? const Center(child: CircularProgressIndicator())
+          : itemList.isEmpty
+              ? Padding(
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+                  child: widget.noRecordText ?? const Text('No record'),
+                )
+              : Scrollbar(
+                  thumbVisibility: true,
+                  controller: controller.scrollController,
+                  child: ListView.builder(
+                    controller: controller.scrollController,
+                    padding: _listviewPadding(isReversed),
+                    itemCount: itemList.length + 1,
+                    shrinkWrap: true,
+                    reverse: isReversed,
+                    itemBuilder: (context, index) {
+                      if (index < itemList.length) {
+                        final item = itemList.elementAt(index);
+                        return CustomInkwell(
+                          child: item.child,
+                          onTap: () {
+                            controller.selectedItem.value = item;
+                            if (widget.onChanged != null) {
+                              widget.onChanged!(item.value);
+                            }
+                            Navigator.pop(context);
+                            if (item.onTap != null) item.onTap!();
+                          },
+                        );
+                      } else {
+                        return ValueListenableBuilder(
+                          valueListenable: controller.state,
+                          builder: (context, SearcableDropdownState state, child) =>
+                              state == SearcableDropdownState.Busy
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : const SizedBox(),
+                        );
+                      }
+                    },
+                  ),
+                ),
     );
   }
 
@@ -372,7 +350,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       builder: (context, SearchableDropdownMenuItem<T>? selectedItem, child) =>
           selectedItem?.child ??
           (selectedItem?.label != null
-              ? Text(selectedItem!.label)
+              ? Text(selectedItem!.label, maxLines: 1, overflow: TextOverflow.fade)
               : widget.hintText) ??
           const SizedBox.shrink(),
     );
