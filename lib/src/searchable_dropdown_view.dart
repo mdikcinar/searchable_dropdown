@@ -137,17 +137,17 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       key: controller.key,
       width: MediaQuery.of(context).size.width,
       child: widget.backgroundDecoration != null
-          ? widget.backgroundDecoration!(buildDropDown(controller))
-          : buildDropDown(controller),
+          ? widget.backgroundDecoration!(buildDropDown(context, controller))
+          : buildDropDown(context, controller),
     );
   }
 
-  GestureDetector buildDropDown(SearcableDropdownController<T> controller) {
+  GestureDetector buildDropDown(BuildContext context, SearcableDropdownController<T> controller) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (widget.isEnabled) {
-          _dropDownOnTab(controller);
+          _dropDownOnTab(context, controller);
         } else if (widget.disabledOnTap != null) {
           widget.disabledOnTap!();
         }
@@ -178,7 +178,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  _dropDownOnTab(SearcableDropdownController<T> controller) {
+  _dropDownOnTab(BuildContext context, SearcableDropdownController<T> controller) {
     bool isReversed = false;
     double? possitionFromBottom = controller.key.globalPaintBounds != null
         ? MediaQuery.of(context).size.height - controller.key.globalPaintBounds!.bottom
@@ -249,7 +249,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
               mainAxisSize: MainAxisSize.min,
               verticalDirection: isReversed ? VerticalDirection.up : VerticalDirection.down,
               children: [
-                buildSearchBar(controller),
+                buildSearchBar(context, controller),
                 Flexible(
                   child: buildListView(controller, isReversed),
                 ),
@@ -261,7 +261,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Padding buildSearchBar(SearcableDropdownController controller) {
+  Padding buildSearchBar(BuildContext context, SearcableDropdownController controller) {
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
       child: CustomSearchBar(
@@ -301,7 +301,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                   controller: controller.scrollController,
                   child: ListView.builder(
                     controller: controller.scrollController,
-                    padding: _listviewPadding(isReversed),
+                    padding: _listviewPadding(context, isReversed),
                     itemCount: itemList.length + 1,
                     shrinkWrap: true,
                     reverse: isReversed,
@@ -336,7 +336,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  EdgeInsets _listviewPadding(bool isReversed) {
+  EdgeInsets _listviewPadding(BuildContext context, bool isReversed) {
     return EdgeInsets.only(
         left: MediaQuery.of(context).size.height * 0.01,
         right: MediaQuery.of(context).size.height * 0.01,
