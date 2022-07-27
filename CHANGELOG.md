@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Text overflow problem fixed
+* State no longer has a context problem fixed
 ## 0.0.6
 
 * On change and value properties fixed
