@@ -225,7 +225,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
             children: [
               SizedBox(
                 height: alertDialogMaxHeight,
-                child: _buildStatefullDropdownCard(controller, isReversed),
+                child: _buildStatefullDropdownCard(context, controller, isReversed),
               ),
             ],
           ),
@@ -236,7 +236,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Widget _buildStatefullDropdownCard(SearcableDropdownController<T> controller, bool isReversed) {
+  Widget _buildStatefullDropdownCard(BuildContext context, SearcableDropdownController<T> controller, bool isReversed) {
     return Column(
       mainAxisAlignment: isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
