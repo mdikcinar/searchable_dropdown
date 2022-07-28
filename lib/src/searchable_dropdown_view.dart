@@ -183,7 +183,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     double? possitionFromBottom = controller.key.globalPaintBounds != null
         ? MediaQuery.of(context).size.height - controller.key.globalPaintBounds!.bottom
         : null;
-    double alertDialogMaxHeight = widget.dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.3;
+    double alertDialogMaxHeight = widget.dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.35;
     double? dialogPossitionFromBottom = possitionFromBottom != null ? possitionFromBottom - alertDialogMaxHeight : null;
     if (dialogPossitionFromBottom != null) {
       //Dialog ekrana sığmıyor ise reverseler
