@@ -348,11 +348,12 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     return ValueListenableBuilder(
       valueListenable: controller.selectedItem,
       builder: (context, SearchableDropdownMenuItem<T>? selectedItem, child) =>
-          selectedItem?.child ??
+          widget.value == null 
+            ? widget.hintText as Widget ?? SizedBox.shrink()
+            : selectedItem?.child ?? 
           (selectedItem?.label != null
               ? Text(selectedItem!.label, maxLines: 1, overflow: TextOverflow.fade)
               : widget.hintText) ??
           const SizedBox.shrink(),
     );
   }
-}
