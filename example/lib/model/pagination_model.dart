@@ -1,15 +1,11 @@
-import 'package:vexana/vexana.dart';
-
-class AnimePaginatedList extends INetworkModel {
+class AnimePaginatedList {
   Pagination? pagination;
   List<Anime>? animeList;
 
   AnimePaginatedList({this.pagination, this.animeList});
 
   AnimePaginatedList.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? Pagination.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? Pagination.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       animeList = <Anime>[];
       json['data'].forEach((v) {
@@ -18,7 +14,6 @@ class AnimePaginatedList extends INetworkModel {
     }
   }
 
-  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (pagination != null) {
@@ -30,7 +25,6 @@ class AnimePaginatedList extends INetworkModel {
     return data;
   }
 
-  @override
   fromJson(Map<String, dynamic> json) => AnimePaginatedList.fromJson(json);
 }
 
@@ -40,8 +34,7 @@ class Pagination {
   int? currentPage;
   Items? items;
 
-  Pagination(
-      {this.lastVisiblePage, this.hasNextPage, this.currentPage, this.items});
+  Pagination({this.lastVisiblePage, this.hasNextPage, this.currentPage, this.items});
 
   Pagination.fromJson(Map<String, dynamic> json) {
     lastVisiblePage = json['last_visible_page'];

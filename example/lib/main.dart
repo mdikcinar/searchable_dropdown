@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
-import 'package:vexana/vexana.dart';
+import 'package:dio/dio.dart';
 
 import 'model/pagination_model.dart';
-import 'service/network_service.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -114,13 +120,9 @@ class MyApp extends StatelessWidget {
     try {
       String url = "https://api.jikan.moe/v4/anime?page=$page";
       if (key != null && key.isNotEmpty) url += "&q=$key";
-      var response = await NetworkService.instance.networkManager.send<AnimePaginatedList, AnimePaginatedList>(
-        url,
-        parseModel: AnimePaginatedList(),
-        method: RequestType.GET,
-      );
-      if (response.error != null) throw Exception(response.error);
-      return response.data;
+      var response = await dio.get(url);
+      if (response.statusCode != 200) throw Exception(response.statusMessage);
+      return AnimePaginatedList.fromJson(response.data);
     } catch (exception) {
       throw Exception(exception);
     }
