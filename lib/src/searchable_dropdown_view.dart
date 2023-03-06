@@ -14,7 +14,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   ///Background decoration of dropdown, i.e. with this you can wrap dropdown with Card
   final Widget Function(Widget child)? backgroundDecoration;
 
-  ///Shwons if there is no record found
+  ///Showns if there is no record found
   final Widget? noRecordText;
 
   ///Dropdown trailing icon
@@ -111,11 +111,11 @@ class SearchableDropdown<T> extends StatefulWidget {
 }
 
 class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
-  late SearcableDropdownController<T> controller;
+  late SearchableDropdownController<T> controller;
 
   @override
   void initState() {
-    controller = SearcableDropdownController<T>();
+    controller = SearchableDropdownController<T>();
     controller.paginatedRequest = widget.paginatedRequest;
     controller.futureRequest = widget.futureRequest;
     controller.requestItemCount = widget.requestItemCount ?? 0;
@@ -142,7 +142,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  GestureDetector buildDropDown(BuildContext context, SearcableDropdownController<T> controller) {
+  GestureDetector buildDropDown(BuildContext context, SearchableDropdownController<T> controller) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -178,23 +178,23 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  _dropDownOnTab(BuildContext context, SearcableDropdownController<T> controller) {
+  _dropDownOnTab(BuildContext context, SearchableDropdownController<T> controller) {
     bool isReversed = false;
-    double? possitionFromBottom = controller.key.globalPaintBounds != null
+    double? positionFromBottom = controller.key.globalPaintBounds != null
         ? MediaQuery.of(context).size.height - controller.key.globalPaintBounds!.bottom
         : null;
     double alertDialogMaxHeight = widget.dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.35;
-    double? dialogPossitionFromBottom = possitionFromBottom != null ? possitionFromBottom - alertDialogMaxHeight : null;
-    if (dialogPossitionFromBottom != null) {
+    double? dialogPositionFromBottom = positionFromBottom != null ? positionFromBottom - alertDialogMaxHeight : null;
+    if (dialogPositionFromBottom != null) {
       //Dialog ekrana sığmıyor ise reverseler
       //If dialog couldn't fit the screen, reverse it
-      if (dialogPossitionFromBottom <= 0) {
+      if (dialogPositionFromBottom <= 0) {
         isReversed = true;
-        dialogPossitionFromBottom += alertDialogMaxHeight +
+        dialogPositionFromBottom += alertDialogMaxHeight +
             controller.key.globalPaintBounds!.height +
             MediaQuery.of(context).size.height * 0.005;
       } else {
-        dialogPossitionFromBottom -= MediaQuery.of(context).size.height * 0.005;
+        dialogPositionFromBottom -= MediaQuery.of(context).size.height * 0.005;
       }
     }
     if (controller.items == null) {
@@ -208,7 +208,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     showDialog(
       context: context,
       builder: (context) {
-        double? reCalculatePosition = dialogPossitionFromBottom;
+        double? reCalculatePosition = dialogPositionFromBottom;
         double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
         //Keyboard varsa digalogu ofsetler
         //If keyboard pushes the dialog, recalculate the dialog's possition.
@@ -225,7 +225,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
             children: [
               SizedBox(
                 height: alertDialogMaxHeight,
-                child: _buildStatefullDropdownCard(context, controller, isReversed),
+                child: _buildStatefulDropdownCard(context, controller, isReversed),
               ),
             ],
           ),
@@ -236,7 +236,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Widget _buildStatefullDropdownCard(BuildContext context, SearcableDropdownController<T> controller, bool isReversed) {
+  Widget _buildStatefulDropdownCard(BuildContext context, SearchableDropdownController<T> controller, bool isReversed) {
     return Column(
       mainAxisAlignment: isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
@@ -261,7 +261,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Padding buildSearchBar(BuildContext context, SearcableDropdownController controller) {
+  Padding buildSearchBar(BuildContext context, SearchableDropdownController controller) {
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
       child: CustomSearchBar(
@@ -286,7 +286,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     );
   }
 
-  Widget buildListView(SearcableDropdownController<T> controller, bool isReversed) {
+  Widget buildListView(SearchableDropdownController<T> controller, bool isReversed) {
     return ValueListenableBuilder(
       valueListenable: (widget.paginatedRequest != null ? controller.paginatedItemList : controller.searchedItems),
       builder: (context, List<SearchableDropdownMenuItem<T>>? itemList, child) => itemList == null
@@ -322,8 +322,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                       } else {
                         return ValueListenableBuilder(
                           valueListenable: controller.state,
-                          builder: (context, SearcableDropdownState state, child) =>
-                              state == SearcableDropdownState.Busy
+                          builder: (context, SearchableDropdownState state, child) =>
+                              state == SearchableDropdownState.Busy
                                   ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
@@ -344,7 +344,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
         top: isReversed ? MediaQuery.of(context).size.height * 0.06 : 0);
   }
 
-  Widget dropDownText(SearcableDropdownController<T> controller) {
+  Widget dropDownText(SearchableDropdownController<T> controller) {
     return ValueListenableBuilder(
       valueListenable: controller.selectedItem,
       builder: (context, SearchableDropdownMenuItem<T>? selectedItem, child) =>

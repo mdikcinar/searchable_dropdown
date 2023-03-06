@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SearchableDropdownMenuItem<T> {
   T? value;
 
-  ///This is for searching or if child property is null this will be shwon
+  ///This is for searching or if child property is null this will be shown
   String label;
 
   ///Dropdown item widget

@@ -33,10 +33,10 @@ class CustomSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusNode myfocusNode = focusNode ?? FocusNode();
-    CancelableOperation? cancelableOpertaion;
+    CancelableOperation? cancelableOperation;
 
     void _startCancelableOperation() {
-      cancelableOpertaion = CancelableOperation.fromFuture(
+      cancelableOperation = CancelableOperation.fromFuture(
         Future.delayed(changeCompletionDelay),
         onCancel: () {},
       );
@@ -50,9 +50,9 @@ class CustomSearchBar extends StatelessWidget {
           focusNode: focusNode,
           maxLines: 1,
           onChanged: (value) async {
-            await cancelableOpertaion?.cancel();
+            await cancelableOperation?.cancel();
             _startCancelableOperation();
-            cancelableOpertaion?.value.whenComplete(() async {
+            cancelableOperation?.value.whenComplete(() async {
               if (onChangeComplete != null) onChangeComplete!(value);
             });
           },
@@ -70,23 +70,20 @@ class CustomSearchBar extends StatelessWidget {
 
     return CustomInkwell(
       padding: EdgeInsets.zero,
-      disableTabEfect: true,
+      disableTabEffect: true,
       onTap: myfocusNode.requestFocus,
       child: isOutlined
           ? Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                    MediaQuery.of(context).size.height * 0.01),
-                border: Border.all(
-                    color: (style?.color ?? Colors.black).withOpacity(0.5)),
+                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.01),
+                border: Border.all(color: (style?.color ?? Colors.black).withOpacity(0.5)),
               ),
               child: _buildTextField(),
             )
           : Card(
               margin: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(
-                      MediaQuery.of(context).size.height * 0.015))),
+                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.height * 0.015))),
               child: _buildTextField(),
             ),
     );
