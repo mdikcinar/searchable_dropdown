@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomInkwell extends StatelessWidget {
-  final Function()? onTap;
-  final EdgeInsets? padding;
-  final Widget child;
-  final bool disableTabEffect;
   const CustomInkwell({
-    Key? key,
     required this.onTap,
     required this.child,
+    super.key,
     this.padding,
     this.disableTabEffect = false,
-  }) : super(key: key);
+  });
+
+  final bool disableTabEffect;
+  final EdgeInsets? padding;
+  final VoidCallback? onTap;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,9 @@ class CustomInkwell extends StatelessWidget {
       splashColor: disableTabEffect ? Colors.transparent : null,
       highlightColor: disableTabEffect ? Colors.transparent : null,
       onTap: onTap,
-      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.015),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Padding(
-        padding: padding ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+        padding: padding ?? const EdgeInsets.all(8),
         child: child,
       ),
     );
