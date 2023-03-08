@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Searchable Dropdown Example'),
         ),
-        body: Column(
+        body: ListView(
           children: [
             Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
@@ -102,6 +102,19 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
+            const SizedBox(height: 20),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              child: SearchableDropdown<int>(
+                hintText: const Text('List of items'),
+                margin: const EdgeInsets.all(15),
+                items: List.generate(
+                    10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+                onChanged: (int? value) {
+                  debugPrint('$value');
+                },
+              ),
+            ),
             TextButton(
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
@@ -109,6 +122,19 @@ class _MyAppState extends State<MyApp> {
                 }
               },
               child: const Text('Save'),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              child: SearchableDropdown<int>(
+                hintText: const Text('List of items'),
+                margin: const EdgeInsets.all(15),
+                items: List.generate(
+                    10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+                onChanged: (int? value) {
+                  debugPrint('$value');
+                },
+              ),
             ),
           ],
         ),

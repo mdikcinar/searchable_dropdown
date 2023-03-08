@@ -298,16 +298,19 @@ class _DropDown<T> extends StatelessWidget {
     var isReversed = false;
     final deviceHeight = context.deviceHeight;
     final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
-    final positionFromBottom =
-        dropdownGlobalPointBounds != null ? deviceHeight - dropdownGlobalPointBounds.bottom : null;
     final alertDialogMaxHeight = dropDownMaxHeight ?? deviceHeight * 0.35;
-    var dialogPositionFromBottom = positionFromBottom != null ? positionFromBottom - alertDialogMaxHeight : null;
     const dialogOffset = 35; //Dialog offset from dropdown
+
+    final dropdownPositionFromBottom =
+        dropdownGlobalPointBounds != null ? deviceHeight - dropdownGlobalPointBounds.bottom : null;
+    var dialogPositionFromBottom =
+        dropdownPositionFromBottom != null ? dropdownPositionFromBottom - alertDialogMaxHeight : null;
     if (dialogPositionFromBottom != null) {
       //If dialog couldn't fit the screen, reverse it
       if (dialogPositionFromBottom <= 0) {
         isReversed = true;
-        dialogPositionFromBottom += alertDialogMaxHeight + controller.key.globalPaintBounds!.height + dialogOffset;
+        final dropdownHeight = dropdownGlobalPointBounds?.height ?? 54;
+        dialogPositionFromBottom += alertDialogMaxHeight + dropdownHeight - dialogOffset;
       } else {
         dialogPositionFromBottom -= dialogOffset;
       }
