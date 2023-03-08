@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 180),
             Form(
               key: formKey,
               child: SearchableDropdownFormField<int>(

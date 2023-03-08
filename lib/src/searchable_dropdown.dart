@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:searchable_paginated_dropdown/src/extensions/custom_global_key_extension.dart';
+import 'package:searchable_paginated_dropdown/src/extensions/extensions.dart';
 import 'package:searchable_paginated_dropdown/src/model/searchable_dropdown_menu_item.dart';
 import 'package:searchable_paginated_dropdown/src/searchable_dropdown_controller.dart';
 import 'package:searchable_paginated_dropdown/src/utils/custom_inkwell.dart';
@@ -124,7 +124,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   //Is dropdown enabled
   final bool isEnabled;
 
-  /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
+  /// Height of dropdown's dialog, default: context.deviceHeight*0.3.
   final double? dropDownMaxHeight;
 
   /// Dropdowns margin padding with other widgets.
@@ -196,49 +196,34 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final dropdownWidget = _DropDown(
+      controller: controller,
+      isEnabled: widget.isEnabled,
+      disabledOnTap: widget.disabledOnTap,
+      dropDownMaxHeight: widget.dropDownMaxHeight,
+      futureRequest: widget.futureRequest,
+      hintText: widget.hintText,
+      leadingIcon: widget.leadingIcon,
+      margin: widget.margin,
+      noRecordText: widget.noRecordText,
+      onChanged: widget.onChanged,
+      paginatedRequest: widget.paginatedRequest,
+      searchHintText: widget.searchHintText,
+      trailingIcon: widget.trailingIcon,
+    );
+
     return SizedBox(
       key: controller.key,
       width: MediaQuery.of(context).size.width,
-      child: widget.backgroundDecoration?.call(
-            _DropDown(
-              controller: controller,
-              isEnabled: widget.isEnabled,
-              disabledOnTap: widget.disabledOnTap,
-              dropDownMaxHeight: widget.dropDownMaxHeight,
-              futureRequest: widget.futureRequest,
-              hintText: widget.hintText,
-              leadingIcon: widget.leadingIcon,
-              margin: widget.margin,
-              noRecordText: widget.noRecordText,
-              onChanged: widget.onChanged,
-              paginatedRequest: widget.paginatedRequest,
-              searchHintText: widget.searchHintText,
-              trailingIcon: widget.trailingIcon,
-            ),
-          ) ??
-          _DropDown(
-            controller: controller,
-            isEnabled: widget.isEnabled,
-            disabledOnTap: widget.disabledOnTap,
-            dropDownMaxHeight: widget.dropDownMaxHeight,
-            futureRequest: widget.futureRequest,
-            hintText: widget.hintText,
-            leadingIcon: widget.leadingIcon,
-            margin: widget.margin,
-            noRecordText: widget.noRecordText,
-            onChanged: widget.onChanged,
-            paginatedRequest: widget.paginatedRequest,
-            searchHintText: widget.searchHintText,
-            trailingIcon: widget.trailingIcon,
-          ),
+      child: widget.backgroundDecoration?.call(dropdownWidget) ?? dropdownWidget,
     );
   }
 }
 
 class _DropDown<T> extends StatelessWidget {
   const _DropDown({
-    required this.isEnabled,
     required this.controller,
+    required this.isEnabled,
     this.leadingIcon,
     this.trailingIcon,
     this.disabledOnTap,
@@ -272,13 +257,13 @@ class _DropDown<T> extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         if (isEnabled) {
-          _dropDownOnTab(context, controller);
+          showDropdownDialog(context, controller);
         } else {
           disabledOnTap?.call();
         }
       },
       child: Padding(
-        padding: margin ?? EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+        padding: margin ?? const EdgeInsets.all(8),
         child: Row(
           children: [
             Expanded(
@@ -299,9 +284,9 @@ class _DropDown<T> extends StatelessWidget {
               ),
             ),
             trailingIcon ??
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  size: MediaQuery.of(context).size.height * 0.033,
+                  size: 24,
                 ),
           ],
         ),
@@ -309,23 +294,22 @@ class _DropDown<T> extends StatelessWidget {
     );
   }
 
-  void _dropDownOnTab(BuildContext context, SearchableDropdownController<T> controller) {
+  void showDropdownDialog(BuildContext context, SearchableDropdownController<T> controller) {
     var isReversed = false;
-    final positionFromBottom = controller.key.globalPaintBounds != null
-        ? MediaQuery.of(context).size.height - controller.key.globalPaintBounds!.bottom
-        : null;
-    final alertDialogMaxHeight = dropDownMaxHeight ?? MediaQuery.of(context).size.height * 0.35;
+    final deviceHeight = context.deviceHeight;
+    final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
+    final positionFromBottom =
+        dropdownGlobalPointBounds != null ? deviceHeight - dropdownGlobalPointBounds.bottom : null;
+    final alertDialogMaxHeight = dropDownMaxHeight ?? deviceHeight * 0.35;
     var dialogPositionFromBottom = positionFromBottom != null ? positionFromBottom - alertDialogMaxHeight : null;
+    const dialogOffset = 35; //Dialog offset from dropdown
     if (dialogPositionFromBottom != null) {
-      //Dialog ekrana sığmıyor ise reverseler
       //If dialog couldn't fit the screen, reverse it
       if (dialogPositionFromBottom <= 0) {
         isReversed = true;
-        dialogPositionFromBottom += alertDialogMaxHeight +
-            controller.key.globalPaintBounds!.height +
-            MediaQuery.of(context).size.height * 0.005;
+        dialogPositionFromBottom += alertDialogMaxHeight + controller.key.globalPaintBounds!.height + dialogOffset;
       } else {
-        dialogPositionFromBottom -= MediaQuery.of(context).size.height * 0.005;
+        dialogPositionFromBottom -= dialogOffset;
       }
     }
     if (controller.items == null) {
@@ -334,23 +318,22 @@ class _DropDown<T> extends StatelessWidget {
     } else {
       controller.searchedItems.value = controller.items;
     }
-    //Hesaplamaları yaptıktan sonra dialogu göster
     //Show the dialog
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         var reCalculatePosition = dialogPositionFromBottom;
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-        //Keyboard varsa digalogu ofsetler
-        //If keyboard pushes the dialog, recalculate the dialog's possition.
+        //If keyboard pushes the dialog, recalculate the dialog's position.
         if (reCalculatePosition != null && reCalculatePosition <= keyboardHeight) {
           reCalculatePosition = (keyboardHeight - reCalculatePosition) + reCalculatePosition;
         }
         return Padding(
           padding: EdgeInsets.only(
-              bottom: reCalculatePosition ?? 0,
-              left: MediaQuery.of(context).size.height * 0.02,
-              right: MediaQuery.of(context).size.height * 0.02),
+            bottom: reCalculatePosition ?? 0,
+            left: 16,
+            right: 16,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -369,7 +352,6 @@ class _DropDown<T> extends StatelessWidget {
           ),
         );
       },
-      barrierDismissible: true,
       barrierColor: Colors.transparent,
     );
   }
@@ -400,8 +382,8 @@ class _DropDownText<T> extends StatelessWidget {
 
 class _DropDownCard<T> extends StatelessWidget {
   const _DropDownCard({
-    required this.isReversed,
     required this.controller,
+    required this.isReversed,
     this.searchHintText,
     this.paginatedRequest,
     this.onChanged,
@@ -423,29 +405,30 @@ class _DropDownCard<T> extends StatelessWidget {
         Flexible(
           child: Card(
             margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(MediaQuery.of(context).size.height * 0.015),
-              ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              verticalDirection: isReversed ? VerticalDirection.up : VerticalDirection.down,
-              children: [
-                _DropDownSearchBar(
-                  controller: controller,
-                  searchHintText: searchHintText,
-                ),
-                Flexible(
-                  child: _DropDownListView(
-                    isReversed: isReversed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                verticalDirection: isReversed ? VerticalDirection.up : VerticalDirection.down,
+                children: [
+                  _DropDownSearchBar(
                     controller: controller,
-                    noRecordText: noRecordText,
-                    onChanged: onChanged,
-                    paginatedRequest: paginatedRequest,
+                    searchHintText: searchHintText,
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: _DropDownListView(
+                      controller: controller,
+                      paginatedRequest: paginatedRequest,
+                      isReversed: isReversed,
+                      noRecordText: noRecordText,
+                      onChanged: onChanged,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -465,24 +448,24 @@ class _DropDownSearchBar<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
+      padding: const EdgeInsets.all(8),
       child: CustomSearchBar(
         focusNode: controller.searchFocusNode,
         changeCompletionDelay: const Duration(milliseconds: 200),
         hintText: searchHintText ?? 'Search',
         isOutlined: true,
-        leadingIcon: Icon(Icons.search, size: MediaQuery.of(context).size.height * 0.033),
+        leadingIcon: const Icon(Icons.search, size: 24),
         onChangeComplete: (value) {
           controller.searchText = value;
           if (controller.items != null) {
             controller.fillSearchedList(value);
             return;
           }
-          if (value == '') {
-            controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
-          } else {
-            controller.getItemsWithPaginatedRequest(page: 1, key: value, isNewSearch: true);
-          }
+          controller.getItemsWithPaginatedRequest(
+            key: value == '' ? null : value,
+            page: 1,
+            isNewSearch: true,
+          );
         },
       ),
     );
@@ -491,8 +474,8 @@ class _DropDownSearchBar<T> extends StatelessWidget {
 
 class _DropDownListView<T> extends StatelessWidget {
   const _DropDownListView({
-    required this.isReversed,
     required this.controller,
+    required this.isReversed,
     this.paginatedRequest,
     this.noRecordText,
     this.onChanged,
@@ -509,10 +492,10 @@ class _DropDownListView<T> extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: paginatedRequest != null ? controller.paginatedItemList : controller.searchedItems,
       builder: (context, List<SearchableDropdownMenuItem<T>>? itemList, child) => itemList == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator.adaptive())
           : itemList.isEmpty
               ? Padding(
-                  padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+                  padding: const EdgeInsets.all(8),
                   child: noRecordText ?? const Text('No record'),
                 )
               : Scrollbar(
@@ -520,7 +503,7 @@ class _DropDownListView<T> extends StatelessWidget {
                   controller: controller.scrollController,
                   child: ListView.builder(
                     controller: controller.scrollController,
-                    padding: listViewPadding(context: context, isReversed: isReversed),
+                    padding: listViewPadding(isReversed: isReversed),
                     itemCount: itemList.length + 1,
                     shrinkWrap: true,
                     reverse: isReversed,
@@ -539,12 +522,12 @@ class _DropDownListView<T> extends StatelessWidget {
                       } else {
                         return ValueListenableBuilder(
                           valueListenable: controller.status,
-                          builder: (context, SearchableDropdownStatus state, child) =>
-                              state == SearchableDropdownStatus.busy
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : const SizedBox(),
+                          builder: (context, SearchableDropdownStatus state, child) {
+                            if (state == SearchableDropdownStatus.busy) {
+                              return const Center(child: CircularProgressIndicator.adaptive());
+                            }
+                            return const SizedBox.shrink();
+                          },
                         );
                       }
                     },
@@ -553,12 +536,13 @@ class _DropDownListView<T> extends StatelessWidget {
     );
   }
 
-  EdgeInsets listViewPadding({required BuildContext context, required bool isReversed}) {
+  EdgeInsets listViewPadding({required bool isReversed}) {
+    const itemHeight = 48.0; //Needed offset to show progress indicator
     return EdgeInsets.only(
-      left: MediaQuery.of(context).size.height * 0.01,
-      right: MediaQuery.of(context).size.height * 0.01,
-      bottom: !isReversed ? MediaQuery.of(context).size.height * 0.06 : 0,
-      top: isReversed ? MediaQuery.of(context).size.height * 0.06 : 0,
+      left: 8,
+      right: 8,
+      bottom: isReversed ? 0 : itemHeight,
+      top: isReversed ? itemHeight : 0,
     );
   }
 }

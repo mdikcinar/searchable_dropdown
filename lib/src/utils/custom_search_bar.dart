@@ -100,7 +100,7 @@ class _SearchBarTextField extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+      padding: const EdgeInsets.all(8),
       child: TextField(
         controller: controller,
         focusNode: focusNode,
