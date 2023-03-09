@@ -17,7 +17,8 @@ class SearchableDropdownController<T> {
   final ValueNotifier<SearchableDropdownStatus> status =
       ValueNotifier<SearchableDropdownStatus>(SearchableDropdownStatus.initial);
 
-  late Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? key)? paginatedRequest;
+  late Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? key)? paginatedRequest;
   late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   late int requestItemCount;
@@ -31,7 +32,8 @@ class SearchableDropdownController<T> {
   bool _hasMoreData = true;
   int _page = 1;
 
-  Future<void> getItemsWithPaginatedRequest({required int page, String? key, bool isNewSearch = false}) async {
+  Future<void> getItemsWithPaginatedRequest(
+      {required int page, String? key, bool isNewSearch = false}) async {
     if (paginatedRequest == null) return;
     if (isNewSearch) {
       _page = 1;
@@ -78,7 +80,8 @@ class SearchableDropdownController<T> {
   void initialize() {
     if (paginatedRequest == null) return;
     scrollController.addListener(() {
-      if (scrollController.position.atEdge && scrollController.position.pixels != 0) {
+      if (scrollController.position.atEdge &&
+          scrollController.position.pixels != 0) {
         if (searchText.isNotEmpty) {
           getItemsWithPaginatedRequest(page: _page, key: searchText);
         } else {

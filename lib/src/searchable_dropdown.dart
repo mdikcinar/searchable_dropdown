@@ -42,7 +42,9 @@ class SearchableDropdown<T> extends StatefulWidget {
         );
 
   const SearchableDropdown.paginated({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function(int, String?)? paginatedRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function(
+            int, String?)?
+        paginatedRequest,
     int? requestItemCount,
     Key? key,
     Widget? hintText,
@@ -76,7 +78,8 @@ class SearchableDropdown<T> extends StatefulWidget {
         );
 
   const SearchableDropdown.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
+        futureRequest,
     Key? key,
     Widget? hintText,
     Widget Function(Widget)? backgroundDecoration,
@@ -141,7 +144,8 @@ class SearchableDropdown<T> extends StatefulWidget {
   final Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   /// Paginated request service which is returns DropdownMenuItem list.
-  final Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+  final Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? searchKey)? paginatedRequest;
 
   /// Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   final int? requestItemCount;
@@ -184,7 +188,8 @@ class SearchableDropdown<T> extends StatefulWidget {
 }
 
 class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
-  final SearchableDropdownController<T> controller = SearchableDropdownController<T>();
+  final SearchableDropdownController<T> controller =
+      SearchableDropdownController<T>();
 
   @override
   void initState() {
@@ -226,7 +231,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     return SizedBox(
       key: controller.key,
       width: MediaQuery.of(context).size.width,
-      child: widget.backgroundDecoration?.call(dropdownWidget) ?? dropdownWidget,
+      child:
+          widget.backgroundDecoration?.call(dropdownWidget) ?? dropdownWidget,
     );
   }
 }
@@ -253,7 +259,8 @@ class _DropDown<T> extends StatelessWidget {
   final double? dropDownMaxHeight;
   final EdgeInsetsGeometry? margin;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
-  final Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+  final Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? searchKey)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final String? searchHintText;
   final VoidCallback? disabledOnTap;
@@ -326,29 +333,34 @@ class _DropDown<T> extends StatelessWidget {
     );
   }
 
-  void showDropdownDialog(BuildContext context, SearchableDropdownController<T> controller) {
+  void showDropdownDialog(
+      BuildContext context, SearchableDropdownController<T> controller) {
     var isReversed = false;
     final deviceHeight = context.deviceHeight;
     final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
     final alertDialogMaxHeight = dropDownMaxHeight ?? deviceHeight * 0.35;
     const dialogOffset = 35; //Dialog offset from dropdown
 
-    final dropdownPositionFromBottom =
-        dropdownGlobalPointBounds != null ? deviceHeight - dropdownGlobalPointBounds.bottom : null;
-    var dialogPositionFromBottom =
-        dropdownPositionFromBottom != null ? dropdownPositionFromBottom - alertDialogMaxHeight : null;
+    final dropdownPositionFromBottom = dropdownGlobalPointBounds != null
+        ? deviceHeight - dropdownGlobalPointBounds.bottom
+        : null;
+    var dialogPositionFromBottom = dropdownPositionFromBottom != null
+        ? dropdownPositionFromBottom - alertDialogMaxHeight
+        : null;
     if (dialogPositionFromBottom != null) {
       //If dialog couldn't fit the screen, reverse it
       if (dialogPositionFromBottom <= 0) {
         isReversed = true;
         final dropdownHeight = dropdownGlobalPointBounds?.height ?? 54;
-        dialogPositionFromBottom += alertDialogMaxHeight + dropdownHeight - dialogOffset;
+        dialogPositionFromBottom +=
+            alertDialogMaxHeight + dropdownHeight - dialogOffset;
       } else {
         dialogPositionFromBottom -= dialogOffset;
       }
     }
     if (controller.items == null) {
-      if (paginatedRequest != null) controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
+      if (paginatedRequest != null)
+        controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
       if (futureRequest != null) controller.getItemsWithFutureRequest();
     } else {
       controller.searchedItems.value = controller.items;
@@ -360,8 +372,10 @@ class _DropDown<T> extends StatelessWidget {
         var reCalculatePosition = dialogPositionFromBottom;
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
         //If keyboard pushes the dialog, recalculate the dialog's position.
-        if (reCalculatePosition != null && reCalculatePosition <= keyboardHeight) {
-          reCalculatePosition = (keyboardHeight - reCalculatePosition) + reCalculatePosition;
+        if (reCalculatePosition != null &&
+            reCalculatePosition <= keyboardHeight) {
+          reCalculatePosition =
+              (keyboardHeight - reCalculatePosition) + reCalculatePosition;
         }
         return Padding(
           padding: EdgeInsets.only(
@@ -408,7 +422,8 @@ class _DropDownText<T> extends StatelessWidget {
       builder: (context, SearchableDropdownMenuItem<T>? selectedItem, child) =>
           selectedItem?.child ??
           (selectedItem?.label != null
-              ? Text(selectedItem!.label, maxLines: 1, overflow: TextOverflow.fade)
+              ? Text(selectedItem!.label,
+                  maxLines: 1, overflow: TextOverflow.fade)
               : hintText) ??
           const SizedBox.shrink(),
     );
@@ -426,7 +441,8 @@ class _DropDownCard<T> extends StatelessWidget {
   });
 
   final bool isReversed;
-  final Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+  final Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? searchKey)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final String? searchHintText;
   final void Function(T? value)? onChanged;
@@ -435,7 +451,8 @@ class _DropDownCard<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isReversed ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Flexible(
           child: Card(
@@ -447,7 +464,8 @@ class _DropDownCard<T> extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                verticalDirection: isReversed ? VerticalDirection.up : VerticalDirection.down,
+                verticalDirection:
+                    isReversed ? VerticalDirection.up : VerticalDirection.down,
                 children: [
                   _DropDownSearchBar(
                     controller: controller,
@@ -517,7 +535,8 @@ class _DropDownListView<T> extends StatelessWidget {
   });
 
   final bool isReversed;
-  final Future<List<SearchableDropdownMenuItem<T>>?> Function(int page, String? searchKey)? paginatedRequest;
+  final Future<List<SearchableDropdownMenuItem<T>>?> Function(
+      int page, String? searchKey)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final void Function(T? value)? onChanged;
   final Widget? noRecordText;
@@ -525,49 +544,56 @@ class _DropDownListView<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: paginatedRequest != null ? controller.paginatedItemList : controller.searchedItems,
-      builder: (context, List<SearchableDropdownMenuItem<T>>? itemList, child) => itemList == null
-          ? const Center(child: CircularProgressIndicator.adaptive())
-          : itemList.isEmpty
-              ? Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: noRecordText ?? const Text('No record'),
-                )
-              : Scrollbar(
-                  thumbVisibility: true,
-                  controller: controller.scrollController,
-                  child: ListView.builder(
-                    controller: controller.scrollController,
-                    padding: listViewPadding(isReversed: isReversed),
-                    itemCount: itemList.length + 1,
-                    shrinkWrap: true,
-                    reverse: isReversed,
-                    itemBuilder: (context, index) {
-                      if (index < itemList.length) {
-                        final item = itemList.elementAt(index);
-                        return CustomInkwell(
-                          child: item.child,
-                          onTap: () {
-                            controller.selectedItem.value = item;
-                            onChanged?.call(item.value);
-                            Navigator.pop(context);
-                            item.onTap?.call();
-                          },
-                        );
-                      } else {
-                        return ValueListenableBuilder(
-                          valueListenable: controller.status,
-                          builder: (context, SearchableDropdownStatus state, child) {
-                            if (state == SearchableDropdownStatus.busy) {
-                              return const Center(child: CircularProgressIndicator.adaptive());
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        );
-                      }
-                    },
-                  ),
-                ),
+      valueListenable: paginatedRequest != null
+          ? controller.paginatedItemList
+          : controller.searchedItems,
+      builder: (context, List<SearchableDropdownMenuItem<T>>? itemList,
+              child) =>
+          itemList == null
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : itemList.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: noRecordText ?? const Text('No record'),
+                    )
+                  : Scrollbar(
+                      thumbVisibility: true,
+                      controller: controller.scrollController,
+                      child: ListView.builder(
+                        controller: controller.scrollController,
+                        padding: listViewPadding(isReversed: isReversed),
+                        itemCount: itemList.length + 1,
+                        shrinkWrap: true,
+                        reverse: isReversed,
+                        itemBuilder: (context, index) {
+                          if (index < itemList.length) {
+                            final item = itemList.elementAt(index);
+                            return CustomInkwell(
+                              child: item.child,
+                              onTap: () {
+                                controller.selectedItem.value = item;
+                                onChanged?.call(item.value);
+                                Navigator.pop(context);
+                                item.onTap?.call();
+                              },
+                            );
+                          } else {
+                            return ValueListenableBuilder(
+                              valueListenable: controller.status,
+                              builder: (context, SearchableDropdownStatus state,
+                                  child) {
+                                if (state == SearchableDropdownStatus.busy) {
+                                  return const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive());
+                                }
+                                return const SizedBox.shrink();
+                              },
+                            );
+                          }
+                        },
+                      ),
+                    ),
     );
   }
 

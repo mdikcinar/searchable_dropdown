@@ -41,7 +41,8 @@ class CustomSearchBar extends StatelessWidget {
           ? DecoratedBox(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
-                border: Border.all(color: (style?.color ?? Colors.black).withOpacity(0.5)),
+                border: Border.all(
+                    color: (style?.color ?? Colors.black).withOpacity(0.5)),
               ),
               child: _SearchBarTextField(
                 onChangeComplete: onChangeComplete,
@@ -55,7 +56,8 @@ class CustomSearchBar extends StatelessWidget {
             )
           : Card(
               margin: EdgeInsets.zero,
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
               child: _SearchBarTextField(
                 onChangeComplete: onChangeComplete,
                 changeCompletionDelay: changeCompletionDelay,
