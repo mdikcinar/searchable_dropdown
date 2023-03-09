@@ -1,3 +1,10 @@
+## 1.0.0
+* Clear dropdown after filled feature added
+* Circular progress indicator changed with adaptive.
+* Dynamic heights replaced with const ones
+* Package dart version reduced `2.17.1` to `2.17.0`
+* Package code refactored as more clean code
+  
 ## 0.0.7
 
 * Text overflow problem fixed
