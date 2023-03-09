@@ -43,7 +43,7 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   const SearchableDropdown.paginated({
     required Future<List<SearchableDropdownMenuItem<T>>?> Function(
-            int, String?)?
+            int, String?,)?
         paginatedRequest,
     int? requestItemCount,
     Key? key,
@@ -145,7 +145,7 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   /// Paginated request service which is returns DropdownMenuItem list.
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+      int page, String? searchKey,)? paginatedRequest;
 
   /// Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   final int? requestItemCount;
@@ -260,7 +260,7 @@ class _DropDown<T> extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+      int page, String? searchKey,)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final String? searchHintText;
   final VoidCallback? disabledOnTap;
@@ -334,7 +334,7 @@ class _DropDown<T> extends StatelessWidget {
   }
 
   void showDropdownDialog(
-      BuildContext context, SearchableDropdownController<T> controller) {
+      BuildContext context, SearchableDropdownController<T> controller,) {
     var isReversed = false;
     final deviceHeight = context.deviceHeight;
     final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
@@ -359,8 +359,9 @@ class _DropDown<T> extends StatelessWidget {
       }
     }
     if (controller.items == null) {
-      if (paginatedRequest != null)
+      if (paginatedRequest != null) {
         controller.getItemsWithPaginatedRequest(page: 1, isNewSearch: true);
+      }
       if (futureRequest != null) controller.getItemsWithFutureRequest();
     } else {
       controller.searchedItems.value = controller.items;
@@ -423,7 +424,7 @@ class _DropDownText<T> extends StatelessWidget {
           selectedItem?.child ??
           (selectedItem?.label != null
               ? Text(selectedItem!.label,
-                  maxLines: 1, overflow: TextOverflow.fade)
+                  maxLines: 1, overflow: TextOverflow.fade,)
               : hintText) ??
           const SizedBox.shrink(),
     );
@@ -442,7 +443,7 @@ class _DropDownCard<T> extends StatelessWidget {
 
   final bool isReversed;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+      int page, String? searchKey,)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final String? searchHintText;
   final void Function(T? value)? onChanged;
@@ -536,7 +537,7 @@ class _DropDownListView<T> extends StatelessWidget {
 
   final bool isReversed;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+      int page, String? searchKey,)? paginatedRequest;
   final SearchableDropdownController<T> controller;
   final void Function(T? value)? onChanged;
   final Widget? noRecordText;
@@ -548,7 +549,7 @@ class _DropDownListView<T> extends StatelessWidget {
           ? controller.paginatedItemList
           : controller.searchedItems,
       builder: (context, List<SearchableDropdownMenuItem<T>>? itemList,
-              child) =>
+              child,) =>
           itemList == null
               ? const Center(child: CircularProgressIndicator.adaptive())
               : itemList.isEmpty
@@ -581,11 +582,11 @@ class _DropDownListView<T> extends StatelessWidget {
                             return ValueListenableBuilder(
                               valueListenable: controller.status,
                               builder: (context, SearchableDropdownStatus state,
-                                  child) {
+                                  child,) {
                                 if (state == SearchableDropdownStatus.busy) {
                                   return const Center(
                                       child:
-                                          CircularProgressIndicator.adaptive());
+                                          CircularProgressIndicator.adaptive(),);
                                 }
                                 return const SizedBox.shrink();
                               },

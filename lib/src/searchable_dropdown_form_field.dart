@@ -50,7 +50,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   SearchableDropdownFormField.paginated({
     required Future<List<SearchableDropdownMenuItem<T>>?> Function(
-            int, String?)?
+            int, String?,)?
         paginatedRequest,
     int? requestItemCount,
     Key? key,
@@ -259,7 +259,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   /// Paginated request service which is returns DropdownMenuItem list.
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? searchKey)? paginatedRequest;
+      int page, String? searchKey,)? paginatedRequest;
 
   /// Paginated request item count which returns in one page, this value is using for knowledge about isDropdown has more item or not.
   final int? requestItemCount;
