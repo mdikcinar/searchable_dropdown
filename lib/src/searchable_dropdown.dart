@@ -16,6 +16,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     void Function(T?)? onChanged,
     List<SearchableDropdownMenuItem<T>>? items,
@@ -31,6 +32,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           dropDownMaxHeight: dropDownMaxHeight,
           margin: margin,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           onChanged: onChanged,
           items: items,
@@ -50,6 +52,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     void Function(T?)? onChanged,
     bool isEnabled = true,
@@ -65,6 +68,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           dropDownMaxHeight: dropDownMaxHeight,
           margin: margin,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           onChanged: onChanged,
           isEnabled: isEnabled,
@@ -81,6 +85,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     void Function(T?)? onChanged,
     bool isEnabled = true,
@@ -95,6 +100,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           dropDownMaxHeight: dropDownMaxHeight,
           margin: margin,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           onChanged: onChanged,
           isEnabled: isEnabled,
@@ -110,6 +116,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.dropDownMaxHeight,
     this.margin,
     this.trailingIcon,
+    this.trailingClearIcon,
     this.leadingIcon,
     this.onChanged,
     this.items,
@@ -163,6 +170,9 @@ class SearchableDropdown<T> extends StatefulWidget {
   /// Dropdown trailing icon.
   final Widget? trailingIcon;
 
+  /// Dropdown trailing clear icon.
+  final Widget? trailingClearIcon;
+
   /// Dropdown trailing icon.
   final Widget? leadingIcon;
 
@@ -210,6 +220,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       paginatedRequest: widget.paginatedRequest,
       searchHintText: widget.searchHintText,
       trailingIcon: widget.trailingIcon,
+      trailingClearIcon: widget.trailingClearIcon,
     );
 
     return SizedBox(
@@ -226,6 +237,7 @@ class _DropDown<T> extends StatelessWidget {
     required this.isEnabled,
     this.leadingIcon,
     this.trailingIcon,
+    this.trailingClearIcon,
     this.disabledOnTap,
     this.margin,
     this.hintText,
@@ -247,6 +259,7 @@ class _DropDown<T> extends StatelessWidget {
   final VoidCallback? disabledOnTap;
   final void Function(T? value)? onChanged;
   final Widget? trailingIcon;
+  final Widget? trailingClearIcon;
   final Widget? leadingIcon;
   final Widget? hintText;
   final Widget? noRecordText;
@@ -283,11 +296,30 @@ class _DropDown<T> extends StatelessWidget {
                 ],
               ),
             ),
-            trailingIcon ??
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 24,
-                ),
+            ValueListenableBuilder(
+              valueListenable: controller.selectedItem,
+              builder: (context, value, child) {
+                if (value == null) {
+                  return trailingIcon ??
+                      const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 24,
+                      );
+                }
+                return CustomInkwell(
+                  padding: EdgeInsets.zero,
+                  onTap: () {
+                    controller.selectedItem.value = null;
+                    onChanged?.call(null);
+                  },
+                  child: trailingClearIcon ??
+                      const Icon(
+                        Icons.clear,
+                        size: 24,
+                      ),
+                );
+              },
+            ),
           ],
         ),
       ),
