@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            const SizedBox(height: 180),
+            const SizedBox(height: 20),
             Form(
               key: formKey,
               child: SearchableDropdownFormField<int>(
@@ -102,19 +102,6 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-              child: SearchableDropdown<int>(
-                hintText: const Text('List of items'),
-                margin: const EdgeInsets.all(15),
-                items: List.generate(
-                    10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
-                onChanged: (int? value) {
-                  debugPrint('$value');
-                },
-              ),
-            ),
             TextButton(
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
@@ -123,7 +110,7 @@ class _MyAppState extends State<MyApp> {
               },
               child: const Text('Save'),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 150),
             Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
               child: SearchableDropdown<int>(

@@ -21,6 +21,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     void Function(T?)? onChanged,
     Widget? noRecordTex,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
     double? dropDownMaxHeight,
@@ -41,6 +42,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           onChanged: onChanged,
           noRecordText: noRecordTex,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
@@ -63,6 +65,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     void Function(T?)? onChanged,
     Widget? noRecordTex,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
     double? dropDownMaxHeight,
@@ -82,6 +85,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           onChanged: onChanged,
           noRecordText: noRecordTex,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
@@ -104,6 +108,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     void Function(T?)? onChanged,
     Widget? noRecordTex,
     Widget? trailingIcon,
+    Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
     double? dropDownMaxHeight,
@@ -123,6 +128,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           onChanged: onChanged,
           noRecordText: noRecordTex,
           trailingIcon: trailingIcon,
+          trailingClearIcon: trailingClearIcon,
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
@@ -148,6 +154,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.onChanged,
     this.noRecordText,
     this.trailingIcon,
+    this.trailingClearIcon,
     this.leadingIcon,
     this.searchHintText,
     this.dropDownMaxHeight,
@@ -166,6 +173,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       margin: EdgeInsets.zero,
                       leadingIcon: leadingIcon,
                       trailingIcon: trailingIcon,
+                      trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
                       searchHintText: searchHintText,
@@ -188,6 +196,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       margin: EdgeInsets.zero,
                       leadingIcon: leadingIcon,
                       trailingIcon: trailingIcon,
+                      trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
                       searchHintText: searchHintText,
@@ -207,6 +216,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       margin: EdgeInsets.zero,
                       leadingIcon: leadingIcon,
                       trailingIcon: trailingIcon,
+                      trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
                       searchHintText: searchHintText,
@@ -273,6 +283,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   /// Dropdown trailing icon.
   final Widget? trailingIcon;
+
+  /// Dropdown trailing clear icon that clears current selected value.
+  final Widget? trailingClearIcon;
 
   /// Dropdown trailing icon.
   final Widget? leadingIcon;
