@@ -1,3 +1,5 @@
+## 1.1.0
+* Throttle dropable added to scroll listener
 ## 1.0.0
 * Clear dropdown after filled feature added
 * Circular progress indicator changed with adaptive.
