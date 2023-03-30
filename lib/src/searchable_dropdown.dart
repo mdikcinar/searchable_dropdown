@@ -560,39 +560,41 @@ class _DropDownListView<T> extends StatelessWidget {
                   : Scrollbar(
                       thumbVisibility: true,
                       controller: controller.scrollController,
-                      child: ListView.builder(
-                        controller: controller.scrollController,
-                        padding: listViewPadding(isReversed: isReversed),
-                        itemCount: itemList.length + 1,
-                        shrinkWrap: true,
-                        reverse: isReversed,
-                        itemBuilder: (context, index) {
-                          if (index < itemList.length) {
-                            final item = itemList.elementAt(index);
-                            return CustomInkwell(
-                              child: item.child,
-                              onTap: () {
-                                controller.selectedItem.value = item;
-                                onChanged?.call(item.value);
-                                Navigator.pop(context);
-                                item.onTap?.call();
-                              },
-                            );
-                          } else {
-                            return ValueListenableBuilder(
-                              valueListenable: controller.status,
-                              builder: (context, SearchableDropdownStatus state,
-                                  child,) {
-                                if (state == SearchableDropdownStatus.busy) {
-                                  return const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),);
-                                }
-                                return const SizedBox.shrink();
-                              },
-                            );
-                          }
-                        },
+                      child: NotificationListener(
+                        child: ListView.builder(
+                          controller: controller.scrollController,
+                          padding: listViewPadding(isReversed: isReversed),
+                          itemCount: itemList.length + 1,
+                          shrinkWrap: true,
+                          reverse: isReversed,
+                          itemBuilder: (context, index) {
+                            if (index < itemList.length) {
+                              final item = itemList.elementAt(index);
+                              return CustomInkwell(
+                                child: item.child,
+                                onTap: () {
+                                  controller.selectedItem.value = item;
+                                  onChanged?.call(item.value);
+                                  Navigator.pop(context);
+                                  item.onTap?.call();
+                                },
+                              );
+                            } else {
+                              return ValueListenableBuilder(
+                                valueListenable: controller.status,
+                                builder: (context, SearchableDropdownStatus state,
+                                    child,) {
+                                  if (state == SearchableDropdownStatus.busy) {
+                                    return const Center(
+                                        child:
+                                            CircularProgressIndicator.adaptive(),);
+                                  }
+                                  return const SizedBox.shrink();
+                                },
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ),
     );
