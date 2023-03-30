@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:searchable_paginated_dropdown/src/extensions/extensions.dart';
+import 'package:searchable_paginated_dropdown/src/extensions/scroll_controller_extension.dart';
 import 'package:searchable_paginated_dropdown/src/model/searchable_dropdown_menu_item.dart';
 
 // Enum must be before that class.
@@ -18,7 +19,9 @@ class SearchableDropdownController<T> {
       ValueNotifier<SearchableDropdownStatus>(SearchableDropdownStatus.initial);
 
   late Future<List<SearchableDropdownMenuItem<T>>?> Function(
-      int page, String? key,)? paginatedRequest;
+    int page,
+    String? key,
+  )? paginatedRequest;
   late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
   late int requestItemCount;
@@ -32,8 +35,11 @@ class SearchableDropdownController<T> {
   bool _hasMoreData = true;
   int _page = 1;
 
-  Future<void> getItemsWithPaginatedRequest(
-      {required int page, String? key, bool isNewSearch = false,}) async {
+  Future<void> getItemsWithPaginatedRequest({
+    required int page,
+    String? key,
+    bool isNewSearch = false,
+  }) async {
     if (paginatedRequest == null) return;
     if (isNewSearch) {
       _page = 1;
@@ -79,14 +85,11 @@ class SearchableDropdownController<T> {
 
   void initialize() {
     if (paginatedRequest == null) return;
-    scrollController.addListener(() {
-      if (scrollController.position.atEdge &&
-          scrollController.position.pixels != 0) {
-        if (searchText.isNotEmpty) {
-          getItemsWithPaginatedRequest(page: _page, key: searchText);
-        } else {
-          getItemsWithPaginatedRequest(page: _page);
-        }
+    scrollController.onBottomReach(() {
+      if (searchText.isNotEmpty) {
+        getItemsWithPaginatedRequest(page: _page, key: searchText);
+      } else {
+        getItemsWithPaginatedRequest(page: _page);
       }
     });
   }
