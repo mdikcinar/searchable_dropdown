@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
+import 'package:searchable_paginated_dropdown/src/model/dialog_options.dart';
 
 @immutable
 class SearchableDropdownFormField<T> extends FormField<T> {
@@ -24,7 +25,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           items: items,
           key: key,
@@ -46,6 +48,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
         );
 
   SearchableDropdownFormField.paginated({
@@ -72,8 +75,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     Duration? changeCompletionDelay,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           paginatedRequest: paginatedRequest,
           key: key,
@@ -94,6 +98,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
           requestItemCount: requestItemCount,
           changeCompletionDelay: changeCompletionDelay,
         );
@@ -117,8 +122,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     Duration? changeCompletionDelay,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -139,6 +145,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
           changeCompletionDelay: changeCompletionDelay,
         );
 
@@ -165,7 +172,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.trailingClearIcon,
     this.leadingIcon,
     this.searchHintText,
-    this.dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') this.dropDownMaxHeight,
+    this.dialogOptions = const DialogOptions(),
     this.changeCompletionDelay,
   }) : super(
           builder: (FormFieldState<T> state) {
@@ -185,6 +193,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
+                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -208,6 +217,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
+                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -229,6 +239,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
+                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -255,6 +266,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         );
   //Is dropdown enabled
   final bool isEnabled;
+
+  /// Dropdown dialog options.
+  final DialogOptions dialogOptions;
+
+  @Deprecated('Use dialogOptions maxHeight instead')
 
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
   final double? dropDownMaxHeight;

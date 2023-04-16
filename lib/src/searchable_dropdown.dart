@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:searchable_paginated_dropdown/src/extensions/extensions.dart';
+import 'package:searchable_paginated_dropdown/src/model/dialog_options.dart';
 import 'package:searchable_paginated_dropdown/src/model/searchable_dropdown_menu_item.dart';
 import 'package:searchable_paginated_dropdown/src/searchable_dropdown_controller.dart';
 import 'package:searchable_paginated_dropdown/src/utils/custom_inkwell.dart';
@@ -13,7 +14,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
     Widget? noRecordText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
     Widget? trailingClearIcon,
@@ -23,6 +24,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     T? value,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           key: key,
           hintText: hintText,
@@ -30,6 +32,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           searchHintText: searchHintText,
           noRecordText: noRecordText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
           margin: margin,
           trailingIcon: trailingIcon,
           trailingClearIcon: trailingClearIcon,
@@ -53,7 +56,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
     Widget? noRecordText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
     Widget? trailingClearIcon,
@@ -62,6 +65,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Duration? changeCompletionDelay,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           key: key,
           paginatedRequest: paginatedRequest,
@@ -71,6 +75,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           searchHintText: searchHintText,
           noRecordText: noRecordText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
           margin: margin,
           trailingIcon: trailingIcon,
           trailingClearIcon: trailingClearIcon,
@@ -88,7 +93,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
     Widget? noRecordText,
-    double? dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     EdgeInsetsGeometry? margin,
     Widget? trailingIcon,
     Widget? trailingClearIcon,
@@ -97,6 +102,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Duration? changeCompletionDelay,
+    DialogOptions dialogOptions = const DialogOptions(),
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -105,6 +111,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           searchHintText: searchHintText,
           noRecordText: noRecordText,
           dropDownMaxHeight: dropDownMaxHeight,
+          dialogOptions: dialogOptions,
           margin: margin,
           trailingIcon: trailingIcon,
           trailingClearIcon: trailingClearIcon,
@@ -121,7 +128,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.backgroundDecoration,
     this.searchHintText,
     this.noRecordText,
-    this.dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') this.dropDownMaxHeight,
     this.margin,
     this.trailingIcon,
     this.trailingClearIcon,
@@ -135,10 +142,16 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.paginatedRequest,
     this.requestItemCount,
     this.changeCompletionDelay,
+    this.dialogOptions = const DialogOptions(),
   });
 
   //Is dropdown enabled
   final bool isEnabled;
+
+  /// Dropdown dialog options.
+  final DialogOptions dialogOptions;
+
+  @Deprecated('Use dialogOptions maxHeight instead')
 
   /// Height of dropdown's dialog, default: context.deviceHeight*0.3.
   final double? dropDownMaxHeight;
@@ -226,6 +239,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       isEnabled: widget.isEnabled,
       disabledOnTap: widget.disabledOnTap,
       dropDownMaxHeight: widget.dropDownMaxHeight,
+      dialogOptions: widget.dialogOptions,
       futureRequest: widget.futureRequest,
       hintText: widget.hintText,
       leadingIcon: widget.leadingIcon,
@@ -257,16 +271,19 @@ class _DropDown<T> extends StatelessWidget {
     this.disabledOnTap,
     this.margin,
     this.hintText,
-    this.dropDownMaxHeight,
+    @Deprecated('Use dialogOptions maxHeight instead') this.dropDownMaxHeight,
     this.futureRequest,
     this.paginatedRequest,
     this.noRecordText,
     this.onChanged,
     this.searchHintText,
     this.changeCompletionDelay,
+    this.dialogOptions = const DialogOptions(),
   });
 
   final bool isEnabled;
+  final DialogOptions dialogOptions;
+  @Deprecated('Use dialogOptions maxHeight instead')
   final double? dropDownMaxHeight;
   final Duration? changeCompletionDelay;
   final EdgeInsetsGeometry? margin;
@@ -354,7 +371,7 @@ class _DropDown<T> extends StatelessWidget {
     var isReversed = false;
     final deviceHeight = context.deviceHeight;
     final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
-    final alertDialogMaxHeight = dropDownMaxHeight ?? deviceHeight * 0.35;
+    final alertDialogMaxHeight = dialogOptions.maxHeight ?? dropDownMaxHeight ?? deviceHeight * 0.35;
     const dialogOffset = 35; //Dialog offset from dropdown
 
     final dropdownPositionFromBottom =
@@ -392,14 +409,16 @@ class _DropDown<T> extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(
             bottom: reCalculatePosition ?? 0,
-            left: 16,
-            right: 16,
+            left: dialogOptions.horizontalPaddingValue,
+            right: dialogOptions.horizontalPaddingValue,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: dialogOptions.alignment,
             children: [
               SizedBox(
                 height: alertDialogMaxHeight,
+                width: dialogOptions.width,
                 child: _DropDownCard(
                   controller: controller,
                   isReversed: isReversed,
