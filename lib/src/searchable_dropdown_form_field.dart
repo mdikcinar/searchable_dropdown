@@ -73,6 +73,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? leadingIcon,
     String? searchHintText,
     double? dropDownMaxHeight,
+    Duration? changeCompletionDelay,
   }) : this._(
           paginatedRequest: paginatedRequest,
           key: key,
@@ -94,11 +95,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
           requestItemCount: requestItemCount,
+          changeCompletionDelay: changeCompletionDelay,
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
-        futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -117,6 +118,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? leadingIcon,
     String? searchHintText,
     double? dropDownMaxHeight,
+    Duration? changeCompletionDelay,
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -137,6 +139,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
+          changeCompletionDelay: changeCompletionDelay,
         );
 
   SearchableDropdownFormField._({
@@ -163,6 +166,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.leadingIcon,
     this.searchHintText,
     this.dropDownMaxHeight,
+    this.changeCompletionDelay,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -211,6 +215,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
+                      changeCompletionDelay: changeCompletionDelay,
                     ),
                   if (futureRequest != null)
                     SearchableDropdown<T>.future(
@@ -231,6 +236,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
+                      changeCompletionDelay: changeCompletionDelay,
                     ),
                   if (state.hasError)
                     errorWidget != null
@@ -252,6 +258,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
   final double? dropDownMaxHeight;
+
+  /// Delay of dropdown's search callback after typing complete.
+  final Duration? changeCompletionDelay;
 
   /// Dropdowns margin padding with other widgets.
   final EdgeInsetsGeometry? margin;
