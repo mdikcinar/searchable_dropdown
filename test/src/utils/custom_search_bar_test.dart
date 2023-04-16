@@ -6,7 +6,9 @@ import '../../helpers/helpers.dart';
 
 void main() {
   group(CustomSearchBar, () {
-    testWidgets('should wait 800ms cancelableOperation time to call onChangeComplete', (tester) async {
+    testWidgets(
+        'should wait 800ms cancelableOperation time to call onChangeComplete',
+        (tester) async {
       final mockCallBack = MockCallback();
 
       var testValue = '';
