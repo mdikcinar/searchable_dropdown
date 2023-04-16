@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
-import 'package:searchable_paginated_dropdown/src/model/dialog_options.dart';
 
 @immutable
 class SearchableDropdownFormField<T> extends FormField<T> {
@@ -25,8 +24,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
-    DialogOptions dialogOptions = const DialogOptions(),
+    double? dropDownMaxHeight,
+    bool isDialogExpanded = true,
   }) : this._(
           items: items,
           key: key,
@@ -48,7 +47,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
-          dialogOptions: dialogOptions,
+          isDialogExpanded: isDialogExpanded,
         );
 
   SearchableDropdownFormField.paginated({
@@ -75,9 +74,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
     Duration? changeCompletionDelay,
-    DialogOptions dialogOptions = const DialogOptions(),
+    double? dropDownMaxHeight,
+    bool isDialogExpanded = true,
   }) : this._(
           paginatedRequest: paginatedRequest,
           key: key,
@@ -98,9 +97,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
-          dialogOptions: dialogOptions,
           requestItemCount: requestItemCount,
           changeCompletionDelay: changeCompletionDelay,
+          isDialogExpanded: isDialogExpanded,
         );
 
   SearchableDropdownFormField.future({
@@ -122,9 +121,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Widget? trailingClearIcon,
     Widget? leadingIcon,
     String? searchHintText,
-    @Deprecated('Use dialogOptions maxHeight instead') double? dropDownMaxHeight,
+    double? dropDownMaxHeight,
     Duration? changeCompletionDelay,
-    DialogOptions dialogOptions = const DialogOptions(),
+    bool isDialogExpanded = true,
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -145,8 +144,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           leadingIcon: leadingIcon,
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
-          dialogOptions: dialogOptions,
           changeCompletionDelay: changeCompletionDelay,
+          isDialogExpanded: isDialogExpanded,
         );
 
   SearchableDropdownFormField._({
@@ -172,9 +171,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.trailingClearIcon,
     this.leadingIcon,
     this.searchHintText,
-    @Deprecated('Use dialogOptions maxHeight instead') this.dropDownMaxHeight,
-    this.dialogOptions = const DialogOptions(),
+    this.dropDownMaxHeight,
     this.changeCompletionDelay,
+    this.isDialogExpanded = true,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -193,7 +192,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
-                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -203,6 +201,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
+                      isDialogExpanded: isDialogExpanded,
                     ),
                   if (paginatedRequest != null)
                     SearchableDropdown<T>.paginated(
@@ -217,7 +216,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
-                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -226,6 +224,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                         if (onChanged != null) onChanged(value);
                       },
                       changeCompletionDelay: changeCompletionDelay,
+                      isDialogExpanded: isDialogExpanded,
                     ),
                   if (futureRequest != null)
                     SearchableDropdown<T>.future(
@@ -239,7 +238,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       trailingClearIcon: trailingClearIcon,
                       noRecordText: noRecordText,
                       dropDownMaxHeight: dropDownMaxHeight,
-                      dialogOptions: dialogOptions,
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
@@ -248,6 +246,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                         if (onChanged != null) onChanged(value);
                       },
                       changeCompletionDelay: changeCompletionDelay,
+                      isDialogExpanded: isDialogExpanded,
                     ),
                   if (state.hasError)
                     errorWidget != null
@@ -267,10 +266,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   //Is dropdown enabled
   final bool isEnabled;
 
-  /// Dropdown dialog options.
-  final DialogOptions dialogOptions;
-
-  @Deprecated('Use dialogOptions maxHeight instead')
+  //If its true dialog will be expanded all width of screen, other wise dialog will be same size of dropdown.
+  final bool isDialogExpanded;
 
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
   final double? dropDownMaxHeight;

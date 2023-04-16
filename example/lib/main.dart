@@ -111,18 +111,16 @@ class _MyAppState extends State<MyApp> {
               child: const Text('Save'),
             ),
             const SizedBox(height: 150),
-            Row(
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: Card(
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  Card(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                     child: SearchableDropdown<int>(
+                      width: 200,
+                      isDialogExpanded: false,
                       hintText: const Text('List of items'),
-                      dialogOptions: const DialogOptions(
-                        width: 200,
-                        alignment: CrossAxisAlignment.start,
-                      ),
                       margin: const EdgeInsets.all(15),
                       items: List.generate(
                           10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
@@ -131,8 +129,8 @@ class _MyAppState extends State<MyApp> {
                       },
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
