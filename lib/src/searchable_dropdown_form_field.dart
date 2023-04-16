@@ -103,8 +103,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
-        futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -267,7 +266,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   //Is dropdown enabled
   final bool isEnabled;
 
-  //If its true dialog will be expanded all width of screen, other wise dialog will be same size of dropdown.
+  //If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
   final bool isDialogExpanded;
 
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.

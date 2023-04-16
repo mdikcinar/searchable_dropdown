@@ -155,7 +155,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   //Is dropdown enabled
   final bool isEnabled;
 
-  //If its true dialog will be expanded all width of screen, other wise dialog will be same size of dropdown.
+  //If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
   final bool isDialogExpanded;
 
   /// Height of dropdown's dialog, default: context.deviceHeight*0.3.

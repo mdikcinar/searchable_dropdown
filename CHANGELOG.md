@@ -1,3 +1,8 @@
+## 1.2.0
+* isDropdownExpanded parameter added
+  * If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
+* changeCompletionDelay parameter added for search trigger
+
 ## 1.1.0
 * Throttle dropable added to scroll listener
 ## 1.0.0
