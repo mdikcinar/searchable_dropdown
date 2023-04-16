@@ -23,6 +23,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     T? value,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
+    double? width,
+    bool isDialogExpanded = true,
   }) : this._(
           key: key,
           hintText: hintText,
@@ -39,6 +41,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           value: value,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
+          width: width,
+          isDialogExpanded: isDialogExpanded,
         );
 
   const SearchableDropdown.paginated({
@@ -62,6 +66,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Duration? changeCompletionDelay,
+    double? width,
+    bool isDialogExpanded = true,
   }) : this._(
           key: key,
           paginatedRequest: paginatedRequest,
@@ -79,6 +85,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
           changeCompletionDelay: changeCompletionDelay,
+          width: width,
+          isDialogExpanded: isDialogExpanded,
         );
 
   const SearchableDropdown.future({
@@ -97,6 +105,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Duration? changeCompletionDelay,
+    double? width,
+    bool isDialogExpanded = true,
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -113,6 +123,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
           changeCompletionDelay: changeCompletionDelay,
+          width: width,
+          isDialogExpanded: isDialogExpanded,
         );
 
   const SearchableDropdown._({
@@ -135,13 +147,20 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.paginatedRequest,
     this.requestItemCount,
     this.changeCompletionDelay,
+    this.width,
+    this.isDialogExpanded = false,
   });
 
   //Is dropdown enabled
   final bool isEnabled;
 
+  //If its true dialog will be expanded all width of screen, other wise dialog will be same size of dropdown.
+  final bool isDialogExpanded;
+
   /// Height of dropdown's dialog, default: context.deviceHeight*0.3.
   final double? dropDownMaxHeight;
+
+  final double? width;
 
   /// Delay of dropdown's search callback after typing complete.
   final Duration? changeCompletionDelay;
@@ -237,11 +256,12 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       trailingIcon: widget.trailingIcon,
       trailingClearIcon: widget.trailingClearIcon,
       changeCompletionDelay: widget.changeCompletionDelay,
+      isDialogExpanded: widget.isDialogExpanded,
     );
 
     return SizedBox(
       key: controller.key,
-      width: MediaQuery.of(context).size.width,
+      width: widget.width ?? MediaQuery.of(context).size.width,
       child: widget.backgroundDecoration?.call(dropdownWidget) ?? dropdownWidget,
     );
   }
@@ -251,6 +271,7 @@ class _DropDown<T> extends StatelessWidget {
   const _DropDown({
     required this.controller,
     required this.isEnabled,
+    required this.isDialogExpanded,
     this.leadingIcon,
     this.trailingIcon,
     this.trailingClearIcon,
@@ -267,6 +288,7 @@ class _DropDown<T> extends StatelessWidget {
   });
 
   final bool isEnabled;
+  final bool isDialogExpanded;
   final double? dropDownMaxHeight;
   final Duration? changeCompletionDelay;
   final EdgeInsetsGeometry? margin;
@@ -392,14 +414,16 @@ class _DropDown<T> extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(
             bottom: reCalculatePosition ?? 0,
-            left: 16,
-            right: 16,
+            left: isDialogExpanded ? 16 : dropdownGlobalPointBounds?.left ?? 0,
+            right: isDialogExpanded ? 16 : 0,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: isDialogExpanded ? CrossAxisAlignment.center : CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: alertDialogMaxHeight,
+                width: isDialogExpanded ? null : dropdownGlobalPointBounds?.width,
                 child: _DropDownCard(
                   controller: controller,
                   isReversed: isReversed,
