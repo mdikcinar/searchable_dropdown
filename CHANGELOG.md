@@ -1,3 +1,6 @@
+## 1.3.0
+* hasTrailingClearIcon parameter added to disable clear functionality
+
 ## 1.2.0
 * isDropdownExpanded parameter added
   * If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
