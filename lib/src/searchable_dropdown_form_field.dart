@@ -26,6 +26,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     String? searchHintText,
     double? dropDownMaxHeight,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           items: items,
           key: key,
@@ -48,6 +49,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           searchHintText: searchHintText,
           dropDownMaxHeight: dropDownMaxHeight,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   SearchableDropdownFormField.paginated({
@@ -77,6 +79,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Duration? changeCompletionDelay,
     double? dropDownMaxHeight,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           paginatedRequest: paginatedRequest,
           key: key,
@@ -100,10 +103,12 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           requestItemCount: requestItemCount,
           changeCompletionDelay: changeCompletionDelay,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
+        futureRequest,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -124,6 +129,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     double? dropDownMaxHeight,
     Duration? changeCompletionDelay,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -146,6 +152,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           dropDownMaxHeight: dropDownMaxHeight,
           changeCompletionDelay: changeCompletionDelay,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   SearchableDropdownFormField._({
@@ -174,6 +181,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.dropDownMaxHeight,
     this.changeCompletionDelay,
     this.isDialogExpanded = true,
+    this.hasTrailingClearIcon = true,
   }) : super(
           builder: (FormFieldState<T> state) {
             return Padding(
@@ -263,11 +271,15 @@ class SearchableDropdownFormField<T> extends FormField<T> {
             );
           },
         );
-  //Is dropdown enabled
+
+  /// Is dropdown enabled.
   final bool isEnabled;
 
-  //If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
+  /// If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
   final bool isDialogExpanded;
+
+  /// Activates clear icon trailing.
+  final bool hasTrailingClearIcon;
 
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
   final double? dropDownMaxHeight;

@@ -25,6 +25,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     VoidCallback? disabledOnTap,
     double? width,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           key: key,
           hintText: hintText,
@@ -43,6 +44,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           disabledOnTap: disabledOnTap,
           width: width,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   const SearchableDropdown.paginated({
@@ -68,6 +70,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Duration? changeCompletionDelay,
     double? width,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           key: key,
           paginatedRequest: paginatedRequest,
@@ -87,6 +90,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           changeCompletionDelay: changeCompletionDelay,
           width: width,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   const SearchableDropdown.future({
@@ -108,6 +112,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Duration? changeCompletionDelay,
     double? width,
     bool isDialogExpanded = true,
+    bool hasTrailingClearIcon = true,
   }) : this._(
           futureRequest: futureRequest,
           key: key,
@@ -126,6 +131,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           changeCompletionDelay: changeCompletionDelay,
           width: width,
           isDialogExpanded: isDialogExpanded,
+          hasTrailingClearIcon: hasTrailingClearIcon,
         );
 
   const SearchableDropdown._({
@@ -149,7 +155,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.requestItemCount,
     this.changeCompletionDelay,
     this.width,
-    this.isDialogExpanded = false,
+    this.isDialogExpanded = true,
+    this.hasTrailingClearIcon = true,
   });
 
   //Is dropdown enabled
@@ -157,6 +164,9 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   //If its true dialog will be expanded all width of screen, otherwise dialog will be same size of dropdown.
   final bool isDialogExpanded;
+
+  /// Activates clear icon trailing.
+  final bool hasTrailingClearIcon;
 
   /// Height of dropdown's dialog, default: context.deviceHeight*0.3.
   final double? dropDownMaxHeight;
@@ -259,6 +269,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       trailingClearIcon: widget.trailingClearIcon,
       changeCompletionDelay: widget.changeCompletionDelay,
       isDialogExpanded: widget.isDialogExpanded,
+      hasTrailingClearIcon: widget.hasTrailingClearIcon,
     );
 
     return SizedBox(
@@ -288,10 +299,12 @@ class _DropDown<T> extends StatelessWidget {
     this.onChanged,
     this.searchHintText,
     this.changeCompletionDelay,
+    this.hasTrailingClearIcon = true,
   });
 
   final bool isEnabled;
   final bool isDialogExpanded;
+  final bool hasTrailingClearIcon;
   final double? dropDownMaxHeight;
   final Duration? changeCompletionDelay;
   final EdgeInsetsGeometry? margin;
@@ -345,7 +358,7 @@ class _DropDown<T> extends StatelessWidget {
             ValueListenableBuilder(
               valueListenable: controller.selectedItem,
               builder: (context, value, child) {
-                if (value == null) {
+                if (value == null || !hasTrailingClearIcon) {
                   return trailingIcon ??
                       const Icon(
                         Icons.keyboard_arrow_down_rounded,

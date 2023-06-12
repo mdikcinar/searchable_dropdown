@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Searchable Dropdown Example'),
         ),
         body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           children: [
             Card(
               shape: RoundedRectangleBorder(
@@ -69,6 +70,35 @@ class _MyAppState extends State<MyApp> {
                   debugPrint('$value');
                 },
               ),
+            ),
+            const SizedBox(height: 20),
+            SearchableDropdown<int>.paginated(
+              backgroundDecoration: (child) => InputDecorator(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  labelText: 'Pokemons',
+                ),
+                child: child,
+              ),
+              hintText: const Text('Paginated request'),
+              paginatedRequest: (int page, String? searchKey) async {
+                final paginatedList =
+                    await getAnimeList(page: page, key: searchKey);
+                return paginatedList?.animeList
+                    ?.map((e) => SearchableDropdownMenuItem(
+                        value: e.malId,
+                        label: e.title ?? '',
+                        child: Text(e.title ?? '')))
+                    .toList();
+              },
+              requestItemCount: 25,
+              onChanged: (int? value) {
+                debugPrint('$value');
+              },
+              hasTrailingClearIcon: false,
+              trailingIcon: const Icon(Icons.arrow_circle_down_outlined),
             ),
             const SizedBox(height: 20),
             Card(
