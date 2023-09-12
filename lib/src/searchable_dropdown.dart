@@ -23,6 +23,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     T? value,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
+    VoidCallback? onDismissDropdown,
+    VoidCallback? onShowDropdown,
     double? width,
     bool isDialogExpanded = true,
   }) : this._(
@@ -41,6 +43,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           value: value,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
+          onDismissDropdown: onDismissDropdown,
+          onShowDropdown: onShowDropdown,
           width: width,
           isDialogExpanded: isDialogExpanded,
         );
@@ -64,6 +68,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     void Function(T?)? onChanged,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
+    VoidCallback? onDismissDropdown,
+    VoidCallback? onShowDropdown,
     Duration? changeCompletionDelay,
     double? width,
     bool isDialogExpanded = true,
@@ -83,6 +89,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           onChanged: onChanged,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
+          onDismissDropdown: onDismissDropdown,
+          onShowDropdown: onShowDropdown,
           changeCompletionDelay: changeCompletionDelay,
           width: width,
           isDialogExpanded: isDialogExpanded,
@@ -104,6 +112,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     void Function(T?)? onChanged,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
+    VoidCallback? onDismissDropdown,
+    VoidCallback? onShowDropdown,
     Duration? changeCompletionDelay,
     double? width,
     bool isDialogExpanded = true,
@@ -122,6 +132,8 @@ class SearchableDropdown<T> extends StatefulWidget {
           onChanged: onChanged,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
+          onDismissDropdown: onDismissDropdown,
+          onShowDropdown: onShowDropdown,
           changeCompletionDelay: changeCompletionDelay,
           width: width,
           isDialogExpanded: isDialogExpanded,
@@ -143,6 +155,8 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.value,
     this.isEnabled = true,
     this.disabledOnTap,
+    this.onDismissDropdown,
+    this.onShowDropdown,
     this.futureRequest,
     this.paginatedRequest,
     this.requestItemCount,
@@ -191,6 +205,12 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   //Triggers this function if dropdown pressed while disabled
   final VoidCallback? disabledOnTap;
+
+  //Triggers this function on dropdown dismissed
+  final VoidCallback? onDismissDropdown;
+
+  //Triggers this function on dropdown open
+  final VoidCallback? onShowDropdown;
 
   /// Returns selected Item.
   final void Function(T? value)? onChanged;
@@ -245,6 +265,8 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       controller: controller,
       isEnabled: widget.isEnabled,
       disabledOnTap: widget.disabledOnTap,
+      onDismissDropdown: widget.onDismissDropdown,
+      onShowDropdown: widget.onShowDropdown,
       dropDownMaxHeight: widget.dropDownMaxHeight,
       futureRequest: widget.futureRequest,
       hintText: widget.hintText,
@@ -278,6 +300,8 @@ class _DropDown<T> extends StatelessWidget {
     this.trailingIcon,
     this.trailingClearIcon,
     this.disabledOnTap,
+    this.onDismissDropdown,
+    this.onShowDropdown,
     this.margin,
     this.hintText,
     this.dropDownMaxHeight,
@@ -302,6 +326,8 @@ class _DropDown<T> extends StatelessWidget {
   final SearchableDropdownController<T> controller;
   final String? searchHintText;
   final VoidCallback? disabledOnTap;
+  final VoidCallback? onDismissDropdown;
+  final VoidCallback? onShowDropdown;
   final void Function(T? value)? onChanged;
   final Widget? trailingIcon;
   final Widget? trailingClearIcon;
@@ -406,6 +432,8 @@ class _DropDown<T> extends StatelessWidget {
     } else {
       controller.searchedItems.value = controller.items;
     }
+    //Call needs to be outside showDialog in case it has setState
+    onShowDropdown?.call();
     //Show the dialog
     showDialog<void>(
       context: context,
@@ -449,7 +477,9 @@ class _DropDown<T> extends StatelessWidget {
         );
       },
       barrierColor: Colors.transparent,
-    );
+    ).then((value) {
+      onDismissDropdown?.call();
+    });
   }
 }
 
