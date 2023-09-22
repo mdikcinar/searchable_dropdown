@@ -68,6 +68,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     Duration? changeCompletionDelay,
     double? width,
     bool isDialogExpanded = true,
+    this.value,
   }) : this._(
           key: key,
           paginatedRequest: paginatedRequest,
@@ -87,6 +88,7 @@ class SearchableDropdown<T> extends StatefulWidget {
           changeCompletionDelay: changeCompletionDelay,
           width: width,
           isDialogExpanded: isDialogExpanded,
+          value: value
         );
 
   const SearchableDropdown.future({
