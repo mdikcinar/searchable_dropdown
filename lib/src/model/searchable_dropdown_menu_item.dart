@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchableDropdownMenuItem<T> {
-  SearchableDropdownMenuItem({
+  const SearchableDropdownMenuItem({
     required this.label,
     required this.child,
     this.value,
@@ -9,13 +9,13 @@ class SearchableDropdownMenuItem<T> {
   });
 
   /// This is for searching or if child property is null this will be shown.
-  String label;
+  final String label;
 
-  T? value;
+  final T? value;
 
   /// Item on tap.
-  VoidCallback? onTap;
+  final VoidCallback? onTap;
 
   /// Dropdown item widget.
-  Widget child;
+  final Widget child;
 }

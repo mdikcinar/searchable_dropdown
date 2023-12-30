@@ -13,7 +13,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
-    T? value,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Widget Function(String?)? errorWidget,
@@ -36,7 +35,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
-          value: value,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
           errorWidget: errorWidget,
@@ -62,7 +60,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
-    T? initialValue,
+    SearchableDropdownMenuItem<T>? initialValue,
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
@@ -85,7 +83,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           key: key,
           onSaved: onSaved,
           validator: validator,
-          initialValue: initialValue,
+          initialValue: initialValue?.value,
+          initialFutureValue: initialValue,
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
@@ -107,12 +106,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
-        futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
-    T? initialValue,
+    SearchableDropdownMenuItem<T>? initialValue,
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
@@ -135,7 +133,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           key: key,
           onSaved: onSaved,
           validator: validator,
-          initialValue: initialValue,
+          initialValue: initialValue?.value,
+          initialFutureValue: initialValue,
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
@@ -165,9 +164,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     super.validator,
     super.initialValue,
     super.autovalidateMode,
+    this.initialFutureValue,
     this.hintText,
     this.margin,
-    this.value,
     this.isEnabled = true,
     this.disabledOnTap,
     this.errorWidget,
@@ -204,7 +203,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
                       items: items,
-                      value: value,
+                      value: initialValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
@@ -227,6 +226,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
+                      initialValue: initialFutureValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
@@ -249,6 +249,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
+                      initialValue: initialFutureValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
@@ -305,11 +306,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   /// Dropdown items.
   final List<SearchableDropdownMenuItem<T>>? items;
 
+  /// Initial value for future and paginated dropdowns.
+  final SearchableDropdownMenuItem<T>? initialFutureValue;
+
   /// SearchBar hint text.
   final String? searchHintText;
-
-  //Initial value of dropdown
-  final T? value;
 
   //Triggers this function if dropdown pressed while disabled
   final VoidCallback? disabledOnTap;
