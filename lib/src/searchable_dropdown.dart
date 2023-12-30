@@ -49,8 +49,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     required Future<List<SearchableDropdownMenuItem<T>>?> Function(
       int,
       String?,
-    )?
-        paginatedRequest,
+    )? paginatedRequest,
     int? requestItemCount,
     Key? key,
     Widget? hintText,
@@ -668,7 +667,9 @@ class _DropDownListView<T> extends StatelessWidget {
   }
 
   EdgeInsets listViewPadding({required bool isReversed}) {
-    const itemHeight = 48.0; //Needed offset to show progress indicator
+    final itemHeight = paginatedRequest != null
+        ? 48.0
+        : 0.0; // Offset to show progress indicator; Only needed on paginated dropdown
     return EdgeInsets.only(
       left: 8,
       right: 8,
