@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
+import 'package:searchable_paginated_dropdown/src/searchable_dropdown_controller.dart';
 
 @immutable
 class SearchableDropdownFormField<T> extends FormField<T> {
   SearchableDropdownFormField({
     required List<SearchableDropdownMenuItem<T>>? items,
     Key? key,
+    SearchableDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
     T? initialValue,
@@ -28,6 +30,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     bool hasTrailingClearIcon = true,
     double? dialogOffset,
   }) : this._(
+          controller: controller,
           items: items,
           key: key,
           onSaved: onSaved,
@@ -60,6 +63,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         paginatedRequest,
     int? requestItemCount,
     Key? key,
+    SearchableDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
     SearchableDropdownMenuItem<T>? initialValue,
@@ -82,6 +86,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     bool hasTrailingClearIcon = true,
     double? dialogOffset,
   }) : this._(
+          controller: controller,
           paginatedRequest: paginatedRequest,
           key: key,
           onSaved: onSaved,
@@ -111,6 +116,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   SearchableDropdownFormField.future({
     required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
+    SearchableDropdownController<T>? controller,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
@@ -134,6 +140,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     bool hasTrailingClearIcon = true,
     double? dialogOffset,
   }) : this._(
+          controller: controller,
           futureRequest: futureRequest,
           key: key,
           onSaved: onSaved,
@@ -161,6 +168,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         );
 
   SearchableDropdownFormField._({
+    this.controller,
     this.items,
     this.futureRequest,
     this.paginatedRequest,
@@ -197,6 +205,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                 children: [
                   if (items != null)
                     SearchableDropdown<T>(
+                      controller: controller,
                       key: key,
                       backgroundDecoration: backgroundDecoration,
                       hintText: hintText,
@@ -220,6 +229,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                     ),
                   if (paginatedRequest != null)
                     SearchableDropdown<T>.paginated(
+                      controller: controller,
                       paginatedRequest: paginatedRequest,
                       requestItemCount: requestItemCount,
                       key: key,
@@ -245,6 +255,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                     ),
                   if (futureRequest != null)
                     SearchableDropdown<T>.future(
+                      controller: controller,
                       futureRequest: futureRequest,
                       key: key,
                       backgroundDecoration: backgroundDecoration,
@@ -318,6 +329,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
 
   /// Dropdown items.
   final List<SearchableDropdownMenuItem<T>>? items;
+
+  final SearchableDropdownController<T>? controller;
 
   /// Initial value for future and paginated dropdowns.
   final SearchableDropdownMenuItem<T>? initialFutureValue;

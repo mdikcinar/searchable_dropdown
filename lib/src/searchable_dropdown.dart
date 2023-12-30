@@ -9,6 +9,7 @@ import 'package:searchable_paginated_dropdown/src/utils/custom_search_bar.dart';
 class SearchableDropdown<T> extends StatefulWidget {
   const SearchableDropdown({
     Key? key,
+    SearchableDropdownController<T>? controller,
     Widget? hintText,
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
@@ -30,6 +31,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   }) : this._(
           key: key,
           hintText: hintText,
+          controller: controller,
           backgroundDecoration: backgroundDecoration,
           searchHintText: searchHintText,
           noRecordText: noRecordText,
@@ -57,6 +59,7 @@ class SearchableDropdown<T> extends StatefulWidget {
         paginatedRequest,
     int? requestItemCount,
     Key? key,
+    SearchableDropdownController<T>? controller,
     Widget? hintText,
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
@@ -77,6 +80,7 @@ class SearchableDropdown<T> extends StatefulWidget {
     double? dialogOffset,
   }) : this._(
           key: key,
+          controller: controller,
           paginatedRequest: paginatedRequest,
           requestItemCount: requestItemCount,
           hintText: hintText,
@@ -102,6 +106,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   const SearchableDropdown.future({
     required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
     Key? key,
+    SearchableDropdownController<T>? controller,
     Widget? hintText,
     Widget Function(Widget)? backgroundDecoration,
     String? searchHintText,
@@ -123,6 +128,7 @@ class SearchableDropdown<T> extends StatefulWidget {
   }) : this._(
           futureRequest: futureRequest,
           key: key,
+          controller: controller,
           hintText: hintText,
           backgroundDecoration: backgroundDecoration,
           searchHintText: searchHintText,
@@ -145,6 +151,7 @@ class SearchableDropdown<T> extends StatefulWidget {
 
   const SearchableDropdown._({
     super.key,
+    this.controller,
     this.hintText,
     this.backgroundDecoration,
     this.searchHintText,
@@ -208,6 +215,8 @@ class SearchableDropdown<T> extends StatefulWidget {
   /// Dropdown items.
   final List<SearchableDropdownMenuItem<T>>? items;
 
+  final SearchableDropdownController<T>? controller;
+
   //Initial value of future and paginated dropdown
   final SearchableDropdownMenuItem<T>? initialFutureValue;
 
@@ -245,10 +254,11 @@ class SearchableDropdown<T> extends StatefulWidget {
 }
 
 class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
-  final SearchableDropdownController<T> controller = SearchableDropdownController<T>();
+  late final SearchableDropdownController<T> controller;
 
   @override
   void initState() {
+    controller = widget.controller ?? SearchableDropdownController<T>();
     controller
       ..paginatedRequest = widget.paginatedRequest
       ..futureRequest = widget.futureRequest
@@ -264,6 +274,14 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     }
     controller.initialize();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.controller != null) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
