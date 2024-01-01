@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:searchable_paginated_dropdown/src/extensions/extensions.dart';
-import 'package:searchable_paginated_dropdown/src/extensions/scroll_controller_extension.dart';
 import 'package:searchable_paginated_dropdown/src/model/searchable_dropdown_menu_item.dart';
 
 // Enum must be before that class.
@@ -8,9 +9,11 @@ import 'package:searchable_paginated_dropdown/src/model/searchable_dropdown_menu
 enum SearchableDropdownStatus { initial, busy, error, loaded }
 
 class SearchableDropdownController<T> {
-  FocusNode searchFocusNode = FocusNode();
-  GlobalKey key = GlobalKey();
-  ScrollController scrollController = ScrollController();
+  SearchableDropdownController({SearchableDropdownMenuItem<T>? initialItem}) {
+    if (initialItem != null) selectedItem.value = initialItem;
+  }
+
+  final GlobalKey key = GlobalKey();
   final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> paginatedItemList =
       ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
   final ValueNotifier<SearchableDropdownMenuItem<T>?> selectedItem =
@@ -24,16 +27,17 @@ class SearchableDropdownController<T> {
   )? paginatedRequest;
   late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
-  late int requestItemCount;
+  int requestItemCount = 25;
 
   late List<SearchableDropdownMenuItem<T>>? items;
 
   String searchText = '';
-  ValueNotifier<List<SearchableDropdownMenuItem<T>>?> searchedItems =
+  final ValueNotifier<List<SearchableDropdownMenuItem<T>>?> searchedItems =
       ValueNotifier<List<SearchableDropdownMenuItem<T>>?>(null);
 
   bool _hasMoreData = true;
   int _page = 1;
+  int get page => _page;
 
   Future<void> getItemsWithPaginatedRequest({
     required int page,
@@ -59,7 +63,6 @@ class SearchableDropdownController<T> {
       _page = _page + 1;
     }
     status.value = SearchableDropdownStatus.loaded;
-    debugPrint('searchable dropdown has more data: $_hasMoreData');
   }
 
   Future<void> getItemsWithFutureRequest() async {
@@ -83,19 +86,14 @@ class SearchableDropdownController<T> {
     searchedItems.value = tempList;
   }
 
-  void initialize() {
-    if (paginatedRequest == null) return;
-    scrollController.onBottomReach(() {
-      if (searchText.isNotEmpty) {
-        getItemsWithPaginatedRequest(page: _page, key: searchText);
-      } else {
-        getItemsWithPaginatedRequest(page: _page);
-      }
-    });
+  void clear() {
+    selectedItem.value = null;
   }
 
   void dispose() {
-    searchFocusNode.dispose();
-    scrollController.dispose();
+    paginatedItemList.dispose();
+    selectedItem.dispose();
+    status.dispose();
+    searchedItems.dispose();
   }
 }

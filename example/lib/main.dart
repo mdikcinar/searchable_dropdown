@@ -16,6 +16,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final dio = Dio();
 
+  final SearchableDropdownController<int> searchableDropdownController = SearchableDropdownController<int>(
+    initialItem: const SearchableDropdownMenuItem(
+      value: 2,
+      label: 'At',
+      child: Text('At'),
+    ),
+  );
+
+  @override
+  void dispose() {
+    searchableDropdownController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -111,7 +125,7 @@ class _MyAppState extends State<MyApp> {
                     initialValue: 2,
                     backgroundDecoration: (child) => Card(
                       margin: EdgeInsets.zero,
-                      color: Colors.red,
+                      color: Colors.lightBlue,
                       elevation: 3,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -131,14 +145,10 @@ class _MyAppState extends State<MyApp> {
                     },
                   ),
                   SearchableDropdownFormField<int>.paginated(
-                    initialValue: const SearchableDropdownMenuItem(
-                      value: 2,
-                      label: 'At',
-                      child: Text('At'),
-                    ),
+                    controller: searchableDropdownController,
                     backgroundDecoration: (child) => Card(
                       margin: EdgeInsets.zero,
-                      color: Colors.red,
+                      color: Colors.amberAccent,
                       elevation: 3,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -165,13 +175,24 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
             ),
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  formKey.currentState?.save();
-                }
-              },
-              child: const Text('Save'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      formKey.currentState?.save();
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    searchableDropdownController.clear();
+                  },
+                  child: const Text('Clear controller'),
+                ),
+              ],
             ),
             const SizedBox(height: 150),
             Padding(

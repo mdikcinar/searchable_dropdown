@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:searchable_paginated_dropdown/searchable_paginated_dropdown.dart';
-import 'package:searchable_paginated_dropdown/src/searchable_dropdown_controller.dart';
 
 @immutable
 class SearchableDropdownFormField<T> extends FormField<T> {
@@ -196,7 +195,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.isDialogExpanded = true,
     this.hasTrailingClearIcon = true,
     this.dialogOffset,
-  }) : super(
+  })  : assert(initialValue == null || controller == null, 'You can use controllers initial item value'),
+        super(
           builder: (FormFieldState<T> state) {
             return Padding(
               padding: margin ?? const EdgeInsets.all(8),
