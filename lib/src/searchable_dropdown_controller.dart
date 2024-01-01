@@ -27,7 +27,7 @@ class SearchableDropdownController<T> {
   )? paginatedRequest;
   late Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
 
-  int requestItemCount = 25;
+  late int requestItemCount;
 
   late List<SearchableDropdownMenuItem<T>>? items;
 

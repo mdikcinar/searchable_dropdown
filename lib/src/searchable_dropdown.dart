@@ -650,6 +650,7 @@ class _DropDownListView<T> extends StatefulWidget {
 
 class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
   ScrollController scrollController = ScrollController();
+  Timer? timer;
 
   @override
   void initState() {
@@ -660,7 +661,9 @@ class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
   @override
   void dispose() {
     super.dispose();
-    scrollController.dispose();
+    scrollController
+      ..removeListener(scrollControllerListener)
+      ..dispose();
   }
 
   @override
@@ -740,11 +743,9 @@ class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
   }
 
   void scrollControllerListener({
-    double sensitivity = 100.0,
-    Duration throttleDuration = const Duration(milliseconds: 200),
+    double sensitivity = 150.0,
+    Duration throttleDuration = const Duration(milliseconds: 400),
   }) {
-    Timer? timer;
-
     if (timer != null) return;
 
     timer = Timer(throttleDuration, () => timer = null);
