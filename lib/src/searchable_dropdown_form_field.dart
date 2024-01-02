@@ -7,13 +7,13 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   SearchableDropdownFormField({
     required List<SearchableDropdownMenuItem<T>>? items,
     Key? key,
+    SearchableDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
     T? initialValue,
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
-    T? value,
     bool isEnabled = true,
     VoidCallback? disabledOnTap,
     Widget Function(String?)? errorWidget,
@@ -27,7 +27,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     double? dropDownMaxHeight,
     bool isDialogExpanded = true,
     bool hasTrailingClearIcon = true,
+    double? dialogOffset,
   }) : this._(
+          controller: controller,
           items: items,
           key: key,
           onSaved: onSaved,
@@ -36,7 +38,6 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
-          value: value,
           isEnabled: isEnabled,
           disabledOnTap: disabledOnTap,
           errorWidget: errorWidget,
@@ -50,6 +51,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           dropDownMaxHeight: dropDownMaxHeight,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
+          dialogOffset: dialogOffset,
         );
 
   SearchableDropdownFormField.paginated({
@@ -60,9 +62,10 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         paginatedRequest,
     int? requestItemCount,
     Key? key,
+    SearchableDropdownController<T>? controller,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
-    T? initialValue,
+    SearchableDropdownMenuItem<T>? initialValue,
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
@@ -80,12 +83,15 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     double? dropDownMaxHeight,
     bool isDialogExpanded = true,
     bool hasTrailingClearIcon = true,
+    double? dialogOffset,
   }) : this._(
+          controller: controller,
           paginatedRequest: paginatedRequest,
           key: key,
           onSaved: onSaved,
           validator: validator,
-          initialValue: initialValue,
+          initialValue: initialValue?.value,
+          initialFutureValue: initialValue,
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
@@ -104,15 +110,16 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           changeCompletionDelay: changeCompletionDelay,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
+          dialogOffset: dialogOffset,
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
-        futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
+    SearchableDropdownController<T>? controller,
     Key? key,
     void Function(T?)? onSaved,
     String? Function(T?)? validator,
-    T? initialValue,
+    SearchableDropdownMenuItem<T>? initialValue,
     AutovalidateMode? autovalidateMode,
     Widget? hintText,
     EdgeInsetsGeometry? margin,
@@ -130,12 +137,15 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     Duration? changeCompletionDelay,
     bool isDialogExpanded = true,
     bool hasTrailingClearIcon = true,
+    double? dialogOffset,
   }) : this._(
+          controller: controller,
           futureRequest: futureRequest,
           key: key,
           onSaved: onSaved,
           validator: validator,
-          initialValue: initialValue,
+          initialValue: initialValue?.value,
+          initialFutureValue: initialValue,
           autovalidateMode: autovalidateMode,
           hintText: hintText,
           margin: margin,
@@ -153,9 +163,11 @@ class SearchableDropdownFormField<T> extends FormField<T> {
           changeCompletionDelay: changeCompletionDelay,
           isDialogExpanded: isDialogExpanded,
           hasTrailingClearIcon: hasTrailingClearIcon,
+          dialogOffset: dialogOffset,
         );
 
   SearchableDropdownFormField._({
+    this.controller,
     this.items,
     this.futureRequest,
     this.paginatedRequest,
@@ -165,9 +177,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     super.validator,
     super.initialValue,
     super.autovalidateMode,
+    this.initialFutureValue,
     this.hintText,
     this.margin,
-    this.value,
     this.isEnabled = true,
     this.disabledOnTap,
     this.errorWidget,
@@ -182,7 +194,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.changeCompletionDelay,
     this.isDialogExpanded = true,
     this.hasTrailingClearIcon = true,
-  }) : super(
+    this.dialogOffset,
+  })  : assert(initialValue == null || controller == null, 'You can use controllers initial item value'),
+        super(
           builder: (FormFieldState<T> state) {
             return Padding(
               padding: margin ?? const EdgeInsets.all(8),
@@ -191,6 +205,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                 children: [
                   if (items != null)
                     SearchableDropdown<T>(
+                      controller: controller,
                       key: key,
                       backgroundDecoration: backgroundDecoration,
                       hintText: hintText,
@@ -204,15 +219,17 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
                       items: items,
-                      value: value,
+                      value: initialValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
                       isDialogExpanded: isDialogExpanded,
+                      dialogOffset: dialogOffset,
                     ),
                   if (paginatedRequest != null)
                     SearchableDropdown<T>.paginated(
+                      controller: controller,
                       paginatedRequest: paginatedRequest,
                       requestItemCount: requestItemCount,
                       key: key,
@@ -227,15 +244,18 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
+                      initialValue: initialFutureValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
                       changeCompletionDelay: changeCompletionDelay,
                       isDialogExpanded: isDialogExpanded,
+                      dialogOffset: dialogOffset,
                     ),
                   if (futureRequest != null)
                     SearchableDropdown<T>.future(
+                      controller: controller,
                       futureRequest: futureRequest,
                       key: key,
                       backgroundDecoration: backgroundDecoration,
@@ -249,12 +269,14 @@ class SearchableDropdownFormField<T> extends FormField<T> {
                       searchHintText: searchHintText,
                       isEnabled: isEnabled,
                       disabledOnTap: disabledOnTap,
+                      initialValue: initialFutureValue,
                       onChanged: (value) {
                         state.didChange(value);
                         if (onChanged != null) onChanged(value);
                       },
                       changeCompletionDelay: changeCompletionDelay,
                       isDialogExpanded: isDialogExpanded,
+                      dialogOffset: dialogOffset,
                     ),
                   if (state.hasError)
                     errorWidget != null
@@ -281,6 +303,9 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   /// Activates clear icon trailing.
   final bool hasTrailingClearIcon;
 
+  /// Dialog offset from dropdown.
+  final double? dialogOffset;
+
   /// Height of dropdown's dialog, default: MediaQuery.of(context).size.height*0.3.
   final double? dropDownMaxHeight;
 
@@ -305,11 +330,13 @@ class SearchableDropdownFormField<T> extends FormField<T> {
   /// Dropdown items.
   final List<SearchableDropdownMenuItem<T>>? items;
 
+  final SearchableDropdownController<T>? controller;
+
+  /// Initial value for future and paginated dropdowns.
+  final SearchableDropdownMenuItem<T>? initialFutureValue;
+
   /// SearchBar hint text.
   final String? searchHintText;
-
-  //Initial value of dropdown
-  final T? value;
 
   //Triggers this function if dropdown pressed while disabled
   final VoidCallback? disabledOnTap;
