@@ -16,7 +16,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final dio = Dio();
 
-  final SearchableDropdownController<int> searchableDropdownController = SearchableDropdownController<int>(
+  final SearchableDropdownController<int> searchableDropdownController =
+      SearchableDropdownController<int>(
     initialItem: const SearchableDropdownMenuItem(
       value: 2,
       label: 'At',
@@ -43,15 +44,18 @@ class _MyAppState extends State<MyApp> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           children: [
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0)),
               child: SearchableDropdown<int>.future(
                 hintText: const Text('Future request'),
                 margin: const EdgeInsets.all(15),
                 futureRequest: () async {
                   final paginatedList = await getAnimeList(page: 1, key: '');
                   return paginatedList?.animeList
-                      ?.map((e) =>
-                          SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+                      ?.map((e) => SearchableDropdownMenuItem(
+                          value: e.malId,
+                          label: e.title ?? '',
+                          child: Text(e.title ?? '')))
                       .toList();
                 },
                 onChanged: (int? value) {
@@ -61,15 +65,19 @@ class _MyAppState extends State<MyApp> {
             ),
             const SizedBox(height: 20),
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0)),
               child: SearchableDropdown<int>.paginated(
                 hintText: const Text('Paginated request'),
                 margin: const EdgeInsets.all(15),
                 paginatedRequest: (int page, String? searchKey) async {
-                  final paginatedList = await getAnimeList(page: page, key: searchKey);
+                  final paginatedList =
+                      await getAnimeList(page: page, key: searchKey);
                   return paginatedList?.animeList
-                      ?.map((e) =>
-                          SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+                      ?.map((e) => SearchableDropdownMenuItem(
+                          value: e.malId,
+                          label: e.title ?? '',
+                          child: Text(e.title ?? '')))
                       .toList();
                 },
                 requestItemCount: 25,
@@ -82,7 +90,8 @@ class _MyAppState extends State<MyApp> {
             SearchableDropdown<int>.paginated(
               backgroundDecoration: (child) => InputDecorator(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   labelText: 'Pokemons',
                 ),
@@ -90,10 +99,13 @@ class _MyAppState extends State<MyApp> {
               ),
               hintText: const Text('Paginated request'),
               paginatedRequest: (int page, String? searchKey) async {
-                final paginatedList = await getAnimeList(page: page, key: searchKey);
+                final paginatedList =
+                    await getAnimeList(page: page, key: searchKey);
                 return paginatedList?.animeList
-                    ?.map((e) =>
-                        SearchableDropdownMenuItem(value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+                    ?.map((e) => SearchableDropdownMenuItem(
+                        value: e.malId,
+                        label: e.title ?? '',
+                        child: Text(e.title ?? '')))
                     .toList();
               },
               requestItemCount: 25,
@@ -105,12 +117,15 @@ class _MyAppState extends State<MyApp> {
             ),
             const SizedBox(height: 20),
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0)),
               child: SearchableDropdown<int>(
                 hintText: const Text('List of items'),
                 margin: const EdgeInsets.all(15),
                 items: List.generate(
-                    10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+                    10,
+                    (i) => SearchableDropdownMenuItem(
+                        value: i, label: 'item $i', child: Text('item $i'))),
                 onChanged: (int? value) {
                   debugPrint('$value');
                 },
@@ -135,7 +150,11 @@ class _MyAppState extends State<MyApp> {
                     hintText: const Text('Search Anime'),
                     margin: const EdgeInsets.all(15),
                     items: List.generate(
-                        10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+                        10,
+                        (i) => SearchableDropdownMenuItem(
+                            value: i,
+                            label: 'item $i',
+                            child: Text('item $i'))),
                     validator: (val) {
                       if (val == null) return 'Cant be empty';
                       return null;
@@ -158,10 +177,13 @@ class _MyAppState extends State<MyApp> {
                     hintText: const Text('Search Anime'),
                     margin: const EdgeInsets.all(15),
                     paginatedRequest: (int page, String? searchKey) async {
-                      final paginatedList = await getAnimeList(page: page, key: searchKey);
+                      final paginatedList =
+                          await getAnimeList(page: page, key: searchKey);
                       return paginatedList?.animeList
                           ?.map((e) => SearchableDropdownMenuItem(
-                              value: e.malId, label: e.title ?? '', child: Text(e.title ?? '')))
+                              value: e.malId,
+                              label: e.title ?? '',
+                              child: Text(e.title ?? '')))
                           .toList();
                     },
                     validator: (val) {
@@ -200,14 +222,19 @@ class _MyAppState extends State<MyApp> {
               child: Row(
                 children: [
                   Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
                     child: SearchableDropdown<int>(
                       width: 200,
                       isDialogExpanded: false,
                       hintText: const Text('List of items'),
                       margin: const EdgeInsets.all(15),
                       items: List.generate(
-                          10, (i) => SearchableDropdownMenuItem(value: i, label: 'item $i', child: Text('item $i'))),
+                          10,
+                          (i) => SearchableDropdownMenuItem(
+                              value: i,
+                              label: 'item $i',
+                              child: Text('item $i'))),
                       onChanged: (int? value) {
                         debugPrint('$value');
                       },
@@ -222,7 +249,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<AnimePaginatedList?> getAnimeList({required int page, String? key}) async {
+  Future<AnimePaginatedList?> getAnimeList(
+      {required int page, String? key}) async {
     try {
       String url = "https://api.jikan.moe/v4/anime?page=$page";
       if (key != null && key.isNotEmpty) url += "&q=$key";

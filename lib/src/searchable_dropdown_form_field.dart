@@ -114,7 +114,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
         );
 
   SearchableDropdownFormField.future({
-    required Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest,
+    required Future<List<SearchableDropdownMenuItem<T>>?> Function()?
+        futureRequest,
     SearchableDropdownController<T>? controller,
     Key? key,
     void Function(T?)? onSaved,
@@ -195,7 +196,8 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.isDialogExpanded = true,
     this.hasTrailingClearIcon = true,
     this.dialogOffset,
-  })  : assert(initialValue == null || controller == null, 'You can use controllers initial item value'),
+  })  : assert(initialValue == null || controller == null,
+            'You can use controllers initial item value'),
         super(
           builder: (FormFieldState<T> state) {
             return Padding(
