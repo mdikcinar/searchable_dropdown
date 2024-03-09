@@ -268,8 +268,9 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       ..requestItemCount = widget.requestItemCount ?? 0
       ..items = widget.items
       ..searchedItems.value = widget.items;
-    if (widget.initialFutureValue != null)
+    if (widget.initialFutureValue != null) {
       dropdownController.selectedItem.value = widget.initialFutureValue;
+    }
     for (final element in widget.items ?? <SearchableDropdownMenuItem<T>>[]) {
       if (element.value == widget.initialValue) {
         dropdownController.selectedItem.value = element;
@@ -775,10 +776,10 @@ class _DropDownListViewState<T> extends State<_DropDownListView<T>> {
     if (maxScroll - currentScroll <= sensitivity) {
       if (searchText.isNotEmpty) {
         dropdownController.getItemsWithPaginatedRequest(
-            page: dropdownController.page, key: searchText);
+            page: dropdownController.page, key: searchText,);
       } else {
         dropdownController.getItemsWithPaginatedRequest(
-            page: dropdownController.page);
+            page: dropdownController.page,);
       }
     }
   }

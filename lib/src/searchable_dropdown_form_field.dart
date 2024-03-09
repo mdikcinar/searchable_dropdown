@@ -197,7 +197,7 @@ class SearchableDropdownFormField<T> extends FormField<T> {
     this.hasTrailingClearIcon = true,
     this.dialogOffset,
   })  : assert(initialValue == null || controller == null,
-            'You can use controllers initial item value'),
+            'You can use controllers initial item value',),
         super(
           builder: (FormFieldState<T> state) {
             return Padding(
