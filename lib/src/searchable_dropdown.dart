@@ -307,7 +307,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
       changeCompletionDelay: widget.changeCompletionDelay,
       isDialogExpanded: widget.isDialogExpanded,
       hasTrailingClearIcon: widget.hasTrailingClearIcon,
-      dialogOffset: widget.dialogOffset,
+      dialogOffset: widget.dialogOffset ?? 35,
     );
 
     return SizedBox(
@@ -323,6 +323,7 @@ class _DropDown<T> extends StatelessWidget {
     required this.controller,
     required this.isEnabled,
     required this.isDialogExpanded,
+    required this.dialogOffset,
     this.leadingIcon,
     this.trailingIcon,
     this.trailingClearIcon,
@@ -337,14 +338,13 @@ class _DropDown<T> extends StatelessWidget {
     this.searchHintText,
     this.changeCompletionDelay,
     this.hasTrailingClearIcon = true,
-    this.dialogOffset,
   });
 
   final bool isEnabled;
   final bool isDialogExpanded;
   final bool hasTrailingClearIcon;
   final double? dropDownMaxHeight;
-  final double? dialogOffset;
+  final double dialogOffset;
   final Duration? changeCompletionDelay;
   final EdgeInsetsGeometry? margin;
   final Future<List<SearchableDropdownMenuItem<T>>?> Function()? futureRequest;
@@ -428,9 +428,8 @@ class _DropDown<T> extends StatelessWidget {
     BuildContext context,
     SearchableDropdownController<T> controller, {
     /// Dialog offset from dropdown.
-    double? dialogOffset,
+    required double dialogOffset,
   }) {
-    final _dialogOffset = dialogOffset ?? 35;
     var isReversed = false;
     final deviceHeight = context.deviceHeight;
     final dropdownGlobalPointBounds = controller.key.globalPaintBounds;
@@ -445,9 +444,9 @@ class _DropDown<T> extends StatelessWidget {
       if (dialogPositionFromBottom <= 0) {
         isReversed = true;
         final dropdownHeight = dropdownGlobalPointBounds?.height ?? 54;
-        dialogPositionFromBottom += alertDialogMaxHeight + dropdownHeight - _dialogOffset;
+        dialogPositionFromBottom += alertDialogMaxHeight + dropdownHeight - dialogOffset;
       } else {
-        dialogPositionFromBottom -= _dialogOffset;
+        dialogPositionFromBottom -= dialogOffset;
       }
     }
     if (controller.items == null) {
