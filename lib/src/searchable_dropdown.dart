@@ -535,9 +535,7 @@ class _DropDown<T> extends StatelessWidget {
         );
       },
       barrierColor: Colors.transparent,
-    ).then((value) {
-      onDismissDropdown?.call();
-    });
+    ).then(((_) => onDismissDropdown?.call()));
   }
 }
 
