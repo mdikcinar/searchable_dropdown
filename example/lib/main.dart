@@ -16,6 +16,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final dio = Dio();
 
+  final SearchableDropdownController<int> searchableDropdownController =
+      SearchableDropdownController<int>(
+    initialItem: const SearchableDropdownMenuItem(
+      value: 2,
+      label: 'At',
+      child: Text('At'),
+    ),
+  );
+
+  @override
+  void dispose() {
+    searchableDropdownController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -26,6 +41,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Searchable Dropdown Example'),
         ),
         body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           children: [
             Card(
               shape: RoundedRectangleBorder(
@@ -71,6 +87,35 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             const SizedBox(height: 20),
+            SearchableDropdown<int>.paginated(
+              backgroundDecoration: (child) => InputDecorator(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0)),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                  labelText: 'Pokemons',
+                ),
+                child: child,
+              ),
+              hintText: const Text('Paginated request'),
+              paginatedRequest: (int page, String? searchKey) async {
+                final paginatedList =
+                    await getAnimeList(page: page, key: searchKey);
+                return paginatedList?.animeList
+                    ?.map((e) => SearchableDropdownMenuItem(
+                        value: e.malId,
+                        label: e.title ?? '',
+                        child: Text(e.title ?? '')))
+                    .toList();
+              },
+              requestItemCount: 25,
+              onChanged: (int? value) {
+                debugPrint('$value');
+              },
+              hasTrailingClearIcon: false,
+              trailingIcon: const Icon(Icons.arrow_circle_down_outlined),
+            ),
+            const SizedBox(height: 20),
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0)),
@@ -89,38 +134,87 @@ class _MyAppState extends State<MyApp> {
             const SizedBox(height: 20),
             Form(
               key: formKey,
-              child: SearchableDropdownFormField<int>(
-                backgroundDecoration: (child) => Card(
-                  margin: EdgeInsets.zero,
-                  color: Colors.red,
-                  elevation: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: child,
+              child: Column(
+                children: [
+                  SearchableDropdownFormField<int>(
+                    initialValue: 2,
+                    backgroundDecoration: (child) => Card(
+                      margin: EdgeInsets.zero,
+                      color: Colors.lightBlue,
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: child,
+                      ),
+                    ),
+                    hintText: const Text('Search Anime'),
+                    margin: const EdgeInsets.all(15),
+                    items: List.generate(
+                        10,
+                        (i) => SearchableDropdownMenuItem(
+                            value: i,
+                            label: 'item $i',
+                            child: Text('item $i'))),
+                    validator: (val) {
+                      if (val == null) return 'Cant be empty';
+                      return null;
+                    },
+                    onSaved: (val) {
+                      debugPrint('On save: $val');
+                    },
                   ),
-                ),
-                hintText: const Text('Search Anime'),
-                margin: const EdgeInsets.all(15),
-                items: List.generate(
-                    10,
-                    (i) => SearchableDropdownMenuItem(
-                        value: i, label: 'item $i', child: Text('item $i'))),
-                validator: (val) {
-                  if (val == null) return 'Cant be empty';
-                  return null;
-                },
-                onSaved: (val) {
-                  debugPrint('On save: $val');
-                },
+                  SearchableDropdownFormField<int>.paginated(
+                    controller: searchableDropdownController,
+                    backgroundDecoration: (child) => Card(
+                      margin: EdgeInsets.zero,
+                      color: Colors.amberAccent,
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: child,
+                      ),
+                    ),
+                    hintText: const Text('Search Anime'),
+                    margin: const EdgeInsets.all(15),
+                    paginatedRequest: (int page, String? searchKey) async {
+                      final paginatedList =
+                          await getAnimeList(page: page, key: searchKey);
+                      return paginatedList?.animeList
+                          ?.map((e) => SearchableDropdownMenuItem(
+                              value: e.malId,
+                              label: e.title ?? '',
+                              child: Text(e.title ?? '')))
+                          .toList();
+                    },
+                    validator: (val) {
+                      if (val == null) return 'Cant be empty';
+                      return null;
+                    },
+                    onSaved: (val) {
+                      debugPrint('On save: $val');
+                    },
+                  ),
+                ],
               ),
             ),
-            TextButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  formKey.currentState?.save();
-                }
-              },
-              child: const Text('Save'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      formKey.currentState?.save();
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    searchableDropdownController.clear();
+                  },
+                  child: const Text('Clear controller'),
+                ),
+              ],
             ),
             const SizedBox(height: 150),
             Padding(
